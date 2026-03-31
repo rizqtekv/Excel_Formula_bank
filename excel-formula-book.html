@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Excel Formula Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="light"]{
+  --color-bg:#f4f6f9;--color-surface:#ffffff;--color-surface-2:#f8fafc;
+  --color-surface-offset:#eef1f5;--color-border:#e2e8f0;--color-divider:#d1d9e0;
+  --color-text:#1a202c;--color-text-muted:#64748b;--color-text-faint:#94a3b8;
+  --color-primary:#1d6fa4;--color-primary-hover:#155e8e;--color-primary-hl:#dbeafe;
+  --color-success:#166534;--color-success-bg:#dcfce7;
+  --color-teal:#0f766e;--color-teal-bg:#ccfbf1;
+  --shadow:rgba(0,0,0,.08);--shadow-md:rgba(0,0,0,.14);
+  --radius-sm:6px;--radius-md:10px;--radius-lg:14px;--radius-full:9999px;
+  --font-body:'Inter',system-ui,sans-serif;--font-code:'Fira Code',monospace;
+  --tr:180ms cubic-bezier(.16,1,.3,1);
+}
+[data-theme="dark"]{
+  --color-bg:#0f1117;--color-surface:#1a1d27;--color-surface-2:#1e2132;
+  --color-surface-offset:#252836;--color-border:#2d3148;--color-divider:#353a52;
+  --color-text:#e8ecf4;--color-text-muted:#8892aa;--color-text-faint:#545e78;
+  --color-primary:#60a5fa;--color-primary-hover:#93c5fd;--color-primary-hl:#1e3a5f;
+  --color-success:#4ade80;--color-success-bg:#14532d;
+  --color-teal:#2dd4bf;--color-teal-bg:#042f2e;
+  --shadow:rgba(0,0,0,.3);--shadow-md:rgba(0,0,0,.5);
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme]){
+  --color-bg:#0f1117;--color-surface:#1a1d27;--color-surface-2:#1e2132;
+  --color-surface-offset:#252836;--color-border:#2d3148;--color-text:#e8ecf4;
+  --color-text-muted:#8892aa;--color-primary:#60a5fa;--color-primary-hl:#1e3a5f;
+}}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-body);background:var(--color-bg);color:var(--color-text);min-height:100dvh;line-height:1.6}
+button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
+input,select{font:inherit;color:inherit}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:100;background:var(--color-surface);border-bottom:1px solid var(--color-border);box-shadow:0 2px 12px var(--shadow);padding:0 20px}
+.hdr-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;height:60px}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--color-text);flex-shrink:0}
+.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,#1d6fa4,#0ea5e9);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-txt{font-size:.9375rem;font-weight:700;letter-spacing:-.02em;white-space:nowrap}
+.logo-txt span{color:var(--color-primary)}
+.srch-wrap{flex:1;max-width:500px;position:relative}
+.srch-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--color-text-faint);pointer-events:none;width:15px;height:15px}
+.srch-input{width:100%;padding:8px 12px 8px 34px;background:var(--color-surface-offset);border:1.5px solid var(--color-border);border-radius:var(--radius-full);font-size:.875rem;outline:none;transition:border-color var(--tr),box-shadow var(--tr)}
+.srch-input:focus{border-color:var(--color-primary);box-shadow:0 0 0 3px var(--color-primary-hl)}
+.srch-input::placeholder{color:var(--color-text-faint)}
+.hdr-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
+.cnt-badge{font-size:.75rem;font-weight:600;background:var(--color-primary-hl);color:var(--color-primary);padding:3px 10px;border-radius:var(--radius-full);white-space:nowrap}
+.theme-btn{width:34px;height:34px;border-radius:50%;background:var(--color-surface-offset);border:1px solid var(--color-border);display:flex;align-items:center;justify-content:center;color:var(--color-text-muted);transition:background var(--tr)}
+.theme-btn:hover{background:var(--color-border)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1d4ed8 0%,#0ea5e9 55%,#0d9488 100%);padding:32px 20px;text-align:center;color:#fff}
+.hero h1{font-size:clamp(1.4rem,3vw,2.1rem);font-weight:800;letter-spacing:-.03em;margin-bottom:7px}
+.hero p{font-size:.9rem;opacity:.88;max-width:540px;margin:0 auto}
+.hero-stats{display:flex;justify-content:center;gap:28px;margin-top:18px;flex-wrap:wrap}
+.stat-num{display:block;font-size:1.4rem;font-weight:800}
+.stat-lbl{font-size:.7rem;opacity:.75;text-transform:uppercase;letter-spacing:.06em}
+
+/* FILTERS */
+.filters-wrap{background:var(--color-surface);border-bottom:1px solid var(--color-border);padding:14px 20px;position:sticky;top:60px;z-index:90}
+.filters-inner{max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.filter-lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-faint);white-space:nowrap;flex-shrink:0;min-width:60px}
+.pill{padding:5px 13px;border-radius:var(--radius-full);font-size:.8rem;font-weight:500;border:1.5px solid var(--color-border);background:var(--color-surface-2);color:var(--color-text-muted);cursor:pointer;transition:all var(--tr);display:flex;align-items:center;gap:5px;white-space:nowrap}
+.pill:hover{border-color:var(--color-primary);color:var(--color-primary)}
+.pill.active{border-color:var(--color-primary);background:var(--color-primary-hl);color:var(--color-primary);font-weight:600}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.pill-count{font-size:.68rem;background:var(--color-surface-offset);padding:1px 6px;border-radius:var(--radius-full);color:var(--color-text-faint)}
+.pill.active .pill-count{background:var(--color-primary);color:#fff}
+.ver-pill{padding:4px 11px;border-radius:var(--radius-full);font-size:.75rem;font-weight:500;border:1.5px solid var(--color-border);background:var(--color-surface-2);color:var(--color-text-muted);cursor:pointer;transition:all var(--tr);white-space:nowrap}
+.ver-pill:hover{border-color:var(--color-text-muted)}
+.ver-pill.active{border-color:var(--color-text);background:var(--color-text);color:var(--color-bg)}
+
+/* GRID */
+.grid-sec{padding:18px 20px 56px;max-width:1280px;margin:0 auto}
+.grid-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.grid-title{font-size:.9375rem;font-weight:600}
+.grid-sub{font-size:.8rem;color:var(--color-text-muted)}
+.sort-sel{padding:6px 10px;border-radius:var(--radius-md);border:1px solid var(--color-border);background:var(--color-surface);font-size:.8rem;color:var(--color-text-muted);cursor:pointer;outline:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr));gap:15px}
+
+/* CARD */
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:18px;display:flex;flex-direction:column;gap:11px;position:relative;overflow:hidden;transition:box-shadow var(--tr),transform var(--tr),border-color var(--tr)}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3.5px;background:var(--cc,var(--color-primary));border-radius:3px 0 0 3px}
+.card:hover{box-shadow:0 6px 24px var(--shadow-md);transform:translateY(-2px);border-color:var(--color-divider)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.card-name-wrap{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.card-name{font-size:1rem;font-weight:700;letter-spacing:-.01em;font-family:var(--font-code)}
+.cat-badge{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:var(--radius-full);background:var(--cb,var(--color-primary-hl));color:var(--cc,var(--color-primary))}
+.copy-btn{flex-shrink:0;width:30px;height:30px;border-radius:var(--radius-md);background:var(--color-surface-offset);border:1px solid var(--color-border);display:flex;align-items:center;justify-content:center;color:var(--color-text-muted);transition:all var(--tr);position:relative}
+.copy-btn:hover{background:var(--color-primary);color:#fff;border-color:var(--color-primary)}
+.copy-btn.copied{background:var(--color-success-bg);color:var(--color-success);border-color:var(--color-success)}
+.copy-tip{position:absolute;top:-30px;left:50%;transform:translateX(-50%);background:var(--color-text);color:var(--color-bg);font-size:.65rem;font-weight:500;padding:2px 7px;border-radius:var(--radius-sm);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity var(--tr)}
+.copy-btn:hover .copy-tip,.copy-btn.copied .copy-tip{opacity:1}
+.syntax{font-family:var(--font-code);font-size:.7875rem;background:var(--color-surface-offset);border:1px solid var(--color-border);padding:7px 11px;border-radius:var(--radius-md);color:var(--color-primary);line-height:1.55;word-break:break-all}
+.desc{font-size:.875rem;color:var(--color-text-muted);line-height:1.6}
+.ex-lbl{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-faint);margin-bottom:3px}
+.ex-val{font-family:var(--font-code);font-size:.775rem;color:var(--color-teal);background:var(--color-teal-bg);padding:6px 10px;border-radius:var(--radius-sm);word-break:break-all}
+.card-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:2px}
+.ver-badge{font-size:.675rem;font-weight:600;padding:3px 9px;border-radius:var(--radius-full)}
+.v-all{background:#e2e8f0;color:#334155}.v-07{background:#ffedd5;color:#c2410c}
+.v-13{background:#dcfce7;color:#166534}.v-16{background:#fef3c7;color:#92400e}
+.v-19{background:#fce7f3;color:#9d174d}.v-21{background:#ede9fe;color:#6d28d9}
+.v-365{background:#dbeafe;color:#1d4ed8}
+[data-theme="dark"] .v-all{background:#1e293b;color:#94a3b8}
+[data-theme="dark"] .v-07{background:#431407;color:#fdba74}
+[data-theme="dark"] .v-13{background:#14532d;color:#86efac}
+[data-theme="dark"] .v-16{background:#451a03;color:#fcd34d}
+[data-theme="dark"] .v-19{background:#500724;color:#f9a8d4}
+[data-theme="dark"] .v-21{background:#2e1065;color:#c4b5fd}
+[data-theme="dark"] .v-365{background:#1e3a5f;color:#93c5fd}
+.no-res{grid-column:1/-1;text-align:center;padding:56px 20px;color:var(--color-text-muted)}
+.no-res-icon{font-size:2.8rem;margin-bottom:10px}
+.no-res h3{font-size:1.1rem;font-weight:600;color:var(--color-text);margin-bottom:5px}
+
+@media(max-width:640px){
+  .logo-txt{display:none}
+  .hero{padding:22px 14px}
+  .hero-stats{gap:18px}
+  .filters-wrap{top:56px}
+  .filter-lbl{min-width:auto}
+  .grid-sec,.filters-inner{padding-left:12px;padding-right:12px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/>
+        </svg>
+      </div>
+      <span class="logo-txt">Excel<span>Formula</span> Book</span>
+    </a>
+    <div class="srch-wrap">
+      <svg class="srch-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="srch-input" type="search" id="searchInput" placeholder="Search formula name, syntax or description…" autocomplete="off">
+    </div>
+    <div class="hdr-right">
+      <span class="cnt-badge" id="resultCount">30 Formulas</span>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>📊 Excel Formula Reference Book</h1>
+  <p>Complete guide to Excel formulas — syntax, examples, explanations &amp; Office version support. Search, filter &amp; copy instantly.</p>
+  <div class="hero-stats">
+    <div><span class="stat-num" id="totalCount">30</span><span class="stat-lbl">Formulas</span></div>
+    <div><span class="stat-num">8</span><span class="stat-lbl">Categories</span></div>
+    <div><span class="stat-num">7</span><span class="stat-lbl">Versions</span></div>
+    <div><span class="stat-num">1-Click</span><span class="stat-lbl">Copy</span></div>
+  </div>
+</section>
+
+<div class="filters-wrap">
+  <div class="filters-inner">
+    <div class="filter-row"><span class="filter-lbl">📁 Category</span><div id="catFilters" style="display:flex;flex-wrap:wrap;gap:7px"></div></div>
+    <div class="filter-row"><span class="filter-lbl">🗓 Version</span><div id="verFilters" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
+  </div>
+</div>
+
+<div class="grid-sec">
+  <div class="grid-hdr">
+    <div><div class="grid-title" id="gridTitle">All Formulas</div><div class="grid-sub" id="gridSub">Showing 30 of 30 formulas</div></div>
+    <select class="sort-sel" id="sortSel">
+      <option value="default">Sort: Default</option>
+      <option value="az">A → Z</option>
+      <option value="za">Z → A</option>
+      <option value="cat">By Category</option>
+    </select>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<script>
+const FORMULAS = [
+  {name:"SUM",cat:"Math & Trig",syntax:"SUM(number1, [number2], ...)",desc:"Adds all numbers in a range of cells or given values. The most frequently used Excel function — perfect for quick totals.",ex:"=SUM(A1:A10)  →  Returns total of A1:A10",ver:"All Versions"},
+  {name:"SUMIF",cat:"Math & Trig",syntax:"SUMIF(range, criteria, [sum_range])",desc:"Sums only cells that meet a single condition. The sum_range can differ from the criteria range.",ex:"=SUMIF(B2:B10,"Apples",C2:C10)  →  Sum sales for Apples",ver:"All Versions"},
+  {name:"SUMIFS",cat:"Math & Trig",syntax:"SUMIFS(sum_range, crit_range1, crit1, ...)",desc:"Adds cells meeting multiple conditions across different ranges. Supports up to 127 criteria pairs.",ex:"=SUMIFS(C2:C10,B2:B10,"Apples",D2:D10,">100")",ver:"Excel 2007+"},
+  {name:"ROUND",cat:"Math & Trig",syntax:"ROUND(number, num_digits)",desc:"Rounds a number to a specified number of decimal places. Positive = decimals, negative = tens/hundreds.",ex:"=ROUND(3.14159, 2)  →  3.14",ver:"All Versions"},
+  {name:"ABS",cat:"Math & Trig",syntax:"ABS(number)",desc:"Returns the absolute (positive) value of a number, removing any negative sign. Useful for distance calculations.",ex:"=ABS(-42)  →  42",ver:"All Versions"},
+  {name:"MOD",cat:"Math & Trig",syntax:"MOD(number, divisor)",desc:"Returns the remainder after dividing a number by the divisor. The sign matches the divisor.",ex:"=MOD(10, 3)  →  1",ver:"All Versions"},
+  {name:"AVERAGE",cat:"Statistical",syntax:"AVERAGE(number1, [number2], ...)",desc:"Returns the arithmetic mean of its arguments. Text and logical values in referenced cells are ignored.",ex:"=AVERAGE(B2:B20)  →  Mean of B2:B20",ver:"All Versions"},
+  {name:"AVERAGEIF",cat:"Statistical",syntax:"AVERAGEIF(range, criteria, [avg_range])",desc:"Returns the average of cells that meet a given condition. If avg_range is omitted, the criteria range is used.",ex:"=AVERAGEIF(A2:A10,">50",B2:B10)",ver:"Excel 2007+"},
+  {name:"COUNT",cat:"Statistical",syntax:"COUNT(value1, [value2], ...)",desc:"Counts the number of cells containing numbers. Text, blanks and logical values are excluded.",ex:"=COUNT(A1:A20)  →  Number of numeric cells",ver:"All Versions"},
+  {name:"COUNTIF",cat:"Statistical",syntax:"COUNTIF(range, criteria)",desc:"Counts cells in a range that meet a single condition. Supports wildcard characters (* and ?).",ex:"=COUNTIF(A1:A50,"Pass")  →  Count of Pass",ver:"All Versions"},
+  {name:"COUNTIFS",cat:"Statistical",syntax:"COUNTIFS(range1, crit1, [range2, crit2], ...)",desc:"Counts cells meeting multiple criteria across different ranges. All criteria must be met simultaneously.",ex:"=COUNTIFS(A2:A10,"Male",B2:B10,">30")",ver:"Excel 2007+"},
+  {name:"MAX",cat:"Statistical",syntax:"MAX(number1, [number2], ...)",desc:"Returns the largest value in a set of values. Logical values and text are ignored in cell references.",ex:"=MAX(C1:C100)  →  Highest value in range",ver:"All Versions"},
+  {name:"MIN",cat:"Statistical",syntax:"MIN(number1, [number2], ...)",desc:"Returns the smallest value in a set of values. Logical values and text in cell references are ignored.",ex:"=MIN(C1:C100)  →  Lowest value in range",ver:"All Versions"},
+  {name:"LEFT",cat:"Text",syntax:"LEFT(text, [num_chars])",desc:"Returns the first N characters from the left of a text string. Default is 1 character if num_chars is omitted.",ex:"=LEFT("ExcelFormula", 5)  →  "Excel"",ver:"All Versions"},
+  {name:"RIGHT",cat:"Text",syntax:"RIGHT(text, [num_chars])",desc:"Returns the last N characters from the right of a text string. Default is 1 character if num_chars is omitted.",ex:"=RIGHT("ExcelFormula", 7)  →  "Formula"",ver:"All Versions"},
+  {name:"MID",cat:"Text",syntax:"MID(text, start_num, num_chars)",desc:"Returns a specific number of characters from a text string starting at a given position.",ex:"=MID("ExcelFormula", 6, 7)  →  "Formula"",ver:"All Versions"},
+  {name:"LEN",cat:"Text",syntax:"LEN(text)",desc:"Returns the total number of characters in a text string, including spaces and special characters.",ex:"=LEN("Hello World")  →  11",ver:"All Versions"},
+  {name:"TRIM",cat:"Text",syntax:"TRIM(text)",desc:"Removes all extra spaces from a text string except for single spaces between words. Essential for cleaning imported data.",ex:"=TRIM("  Hello   World  ")  →  "Hello World"",ver:"All Versions"},
+  {name:"TEXTJOIN",cat:"Text",syntax:"TEXTJOIN(delimiter, ignore_empty, text1, ...)",desc:"Joins text from multiple ranges/strings with a specified delimiter. Can optionally ignore empty cells.",ex:"=TEXTJOIN(", ", TRUE, A1:A5)  →  "A, B, C, D, E"",ver:"Excel 2019+"},
+  {name:"UPPER",cat:"Text",syntax:"UPPER(text)",desc:"Converts all characters in a text string to UPPERCASE letters.",ex:"=UPPER("hello world")  →  "HELLO WORLD"",ver:"All Versions"},
+  {name:"IF",cat:"Logical",syntax:"IF(logical_test, value_if_true, [value_if_false])",desc:"The foundation of conditional logic. Checks a condition and returns one value for TRUE, another for FALSE.",ex:"=IF(A1>100,"High","Low")  →  "High" or "Low"",ver:"All Versions"},
+  {name:"IFS",cat:"Logical",syntax:"IFS(cond1, val1, [cond2, val2], ...)",desc:"Checks multiple conditions and returns the value for the first TRUE condition. Replaces complex nested IFs.",ex:"=IFS(A1>=90,"A",A1>=80,"B",A1>=70,"C",TRUE,"F")",ver:"Excel 2019+"},
+  {name:"IFERROR",cat:"Logical",syntax:"IFERROR(value, value_if_error)",desc:"Returns a custom result if a formula evaluates to any error; otherwise returns the formula result. Great for VLOOKUP error handling.",ex:"=IFERROR(A1/B1, 0)  →  Returns 0 on error",ver:"Excel 2007+"},
+  {name:"AND",cat:"Logical",syntax:"AND(logical1, [logical2], ...)",desc:"Returns TRUE only if ALL arguments evaluate to TRUE. Often nested inside IF for multi-condition tests.",ex:"=AND(A1>10, A1<100)  →  TRUE if 10 < A1 < 100",ver:"All Versions"},
+  {name:"VLOOKUP",cat:"Lookup & Reference",syntax:"VLOOKUP(lookup_val, table, col_index, [range_lookup])",desc:"Searches for a value in the leftmost column of a table and returns a value from a specified column in the same row. Use FALSE for exact match.",ex:"=VLOOKUP("Smith",A2:D100,3,FALSE)  →  Smith\'s salary",ver:"All Versions"},
+  {name:"INDEX",cat:"Lookup & Reference",syntax:"INDEX(array, row_num, [col_num])",desc:"Returns the value at a given position in a range or array. Most powerful when combined with MATCH for flexible lookups.",ex:"=INDEX(B2:B100, 5)  →  5th value in range B2:B100",ver:"All Versions"},
+  {name:"MATCH",cat:"Lookup & Reference",syntax:"MATCH(lookup_val, lookup_array, [match_type])",desc:"Returns the relative position of a value in an array. Use match_type = 0 for exact match. Pairs perfectly with INDEX.",ex:"=MATCH("John", A1:A50, 0)  →  Row position of John",ver:"All Versions"},
+  {name:"XLOOKUP",cat:"Lookup & Reference",syntax:"XLOOKUP(lookup_val, lookup_arr, return_arr, [if_not_found], ...)",desc:"Modern replacement for VLOOKUP & HLOOKUP. Searches any direction, returns multiple columns, with a built-in not-found value.",ex:"=XLOOKUP("Smith",A2:A100,C2:C100,"Not found")",ver:"Excel 365"},
+  {name:"TODAY",cat:"Date & Time",syntax:"TODAY()",desc:"Returns today\'s date as a serial number. Recalculates automatically every time the workbook opens or is recalculated.",ex:"=TODAY()  →  31/03/2026 (current date)",ver:"All Versions"},
+  {name:"ISBLANK",cat:"Information",syntax:"ISBLANK(value)",desc:"Returns TRUE if the referenced cell is completely empty. Returns FALSE if it contains any value, even an empty text string ("").",ex:"=ISBLANK(A1)  →  TRUE if A1 is empty",ver:"All Versions"}
+];
+
+const CAT_CFG = {
+  "All":{"cc":"#1d6fa4","cb":"#dbeafe","dot":"#3b82f6"},
+  "Math & Trig":{"cc":"#166534","cb":"#dcfce7","dot":"#16a34a"},
+  "Statistical":{"cc":"#6d28d9","cb":"#ede9fe","dot":"#7c3aed"},
+  "Text":{"cc":"#c2410c","cb":"#ffedd5","dot":"#ea580c"},
+  "Logical":{"cc":"#0f766e","cb":"#ccfbf1","dot":"#0d9488"},
+  "Lookup & Reference":{"cc":"#1d4ed8","cb":"#dbeafe","dot":"#3b82f6"},
+  "Date & Time":{"cc":"#9d174d","cb":"#fce7f3","dot":"#ec4899"},
+  "Information":{"cc":"#92400e","cb":"#fef3c7","dot":"#f59e0b"},
+};
+const VER_CLS = {"All Versions":"v-all","Excel 2007+":"v-07","Excel 2013+":"v-13","Excel 2016+":"v-16","Excel 2019+":"v-19","Excel 2021+":"v-21","Excel 365":"v-365"};
+const VER_ICO = {"All Versions":"📋","Excel 2007+":"🟠","Excel 2013+":"🟢","Excel 2016+":"🟡","Excel 2019+":"🩷","Excel 2021+":"🟣","Excel 365":"⭐"};
+const VERSIONS = ["All","All Versions","Excel 2007+","Excel 2013+","Excel 2016+","Excel 2019+","Excel 2021+","Excel 365"];
+
+let activeCat="All", activeVer="All", query="", sort="default";
+
+function init(){renderCats();renderVers();renderGrid();}
+
+function renderCats(){
+  const cats=["All",...Object.keys(CAT_CFG).filter(c=>c!=="All")];
+  const el=document.getElementById("catFilters");el.innerHTML="";
+  cats.forEach(c=>{
+    const cnt=c==="All"?FORMULAS.length:FORMULAS.filter(f=>f.cat===c).length;
+    if(!cnt&&c!=="All")return;
+    const cfg=CAT_CFG[c]||CAT_CFG["All"];
+    const b=document.createElement("button");
+    b.className="pill"+(c===activeCat?" active":"");
+    b.innerHTML=`<span class="dot" style="background:${cfg.dot}"></span>${c}<span class="pill-count">${cnt}</span>`;
+    b.onclick=()=>{activeCat=c;renderCats();renderGrid();};
+    el.appendChild(b);
+  });
+}
+
+function renderVers(){
+  const el=document.getElementById("verFilters");el.innerHTML="";
+  VERSIONS.forEach(v=>{
+    const b=document.createElement("button");
+    b.className="ver-pill"+(v===activeVer?" active":"");
+    b.textContent=(VER_ICO[v]||"")+" "+v;
+    b.onclick=()=>{activeVer=v;renderVers();renderGrid();};
+    el.appendChild(b);
+  });
+}
+
+function filtered(){
+  let list=[...FORMULAS];
+  if(activeCat!=="All")list=list.filter(f=>f.cat===activeCat);
+  if(activeVer!=="All")list=list.filter(f=>f.ver===activeVer);
+  if(query){const q=query.toLowerCase();list=list.filter(f=>f.name.toLowerCase().includes(q)||f.syntax.toLowerCase().includes(q)||f.desc.toLowerCase().includes(q)||f.cat.toLowerCase().includes(q));}
+  if(sort==="az")list.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sort==="za")list.sort((a,b)=>b.name.localeCompare(a.name));
+  else if(sort==="cat")list.sort((a,b)=>a.cat.localeCompare(b.cat)||a.name.localeCompare(b.name));
+  return list;
+}
+
+function renderGrid(){
+  const list=filtered();
+  document.getElementById("resultCount").textContent=list.length+" Formulas";
+  document.getElementById("gridTitle").textContent=activeCat==="All"?"All Formulas":activeCat+" Formulas";
+  document.getElementById("gridSub").textContent="Showing "+list.length+" of "+FORMULAS.length+" formulas";
+  const g=document.getElementById("grid");
+  if(!list.length){g.innerHTML=`<div class="no-res"><div class="no-res-icon">🔍</div><h3>No formulas found</h3><p>Try different keywords or reset filters</p></div>`;return;}
+  g.innerHTML=list.map(f=>{
+    const cfg=CAT_CFG[f.cat]||CAT_CFG["All"];
+    const vc=VER_CLS[f.ver]||"v-all";
+    const vi=VER_ICO[f.ver]||"📋";
+    return`<div class="card" style="--cc:${cfg.cc};--cb:${cfg.cb}">
+      <div class="card-top">
+        <div class="card-name-wrap">
+          <span class="card-name">${f.name}</span>
+          <span class="cat-badge">${f.cat}</span>
+        </div>
+        <button class="copy-btn" data-s="${f.syntax}" aria-label="Copy formula">
+          <span class="copy-tip">Copy</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </button>
+      </div>
+      <div class="syntax">${f.syntax}</div>
+      <div class="desc">${f.desc}</div>
+      <div><div class="ex-lbl">Example</div><div class="ex-val">${f.ex}</div></div>
+      <div class="card-footer"><span class="ver-badge ${vc}">${vi} ${f.ver}</span></div>
+    </div>`;
+  }).join("");
+  g.querySelectorAll(".copy-btn").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const txt="="+b.dataset.s;
+      navigator.clipboard.writeText(txt).catch(()=>{});
+      const tip=b.querySelector(".copy-tip");
+      b.classList.add("copied");if(tip)tip.textContent="Copied!";
+      setTimeout(()=>{b.classList.remove("copied");if(tip)tip.textContent="Copy";},1800);
+    });
+  });
+}
+
+document.getElementById("searchInput").addEventListener("input",e=>{query=e.target.value.trim();renderGrid();});
+document.getElementById("sortSel").addEventListener("change",e=>{sort=e.target.value;renderGrid();});
+
+(function(){
+  const btn=document.getElementById("themeBtn"),r=document.documentElement;
+  let d=matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";
+  r.setAttribute("data-theme",d);
+  const sun=`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
+  const moon=`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+  btn.innerHTML=d==="dark"?sun:moon;
+  btn.addEventListener("click",()=>{d=d==="dark"?"light":"dark";r.setAttribute("data-theme",d);btn.innerHTML=d==="dark"?sun:moon;});
+})();
+
+init();
+</script>
+</body>
+</html>
