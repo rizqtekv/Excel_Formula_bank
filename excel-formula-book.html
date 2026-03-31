@@ -122,10 +122,19 @@ input,select{font:inherit;color:inherit}
 .no-res-icon{font-size:2.8rem;margin-bottom:10px}
 .no-res h3{font-size:1.1rem;font-weight:600;color:var(--color-text);margin-bottom:5px}
 
+/* HERO SEARCH */
+.hero-search{margin:22px auto 0;width:100%;max-width:600px;padding:0 4px}
+.hero-srch-wrap{position:relative}
+.hero-srch-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.65);pointer-events:none;width:19px;height:19px}
+.hero-srch-input{width:100%;padding:14px 18px 14px 48px;background:rgba(255,255,255,.15);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,.35);border-radius:var(--radius-full);font-size:1rem;color:#fff;outline:none;transition:border-color var(--tr),box-shadow var(--tr),background var(--tr)}
+.hero-srch-input::placeholder{color:rgba(255,255,255,.65)}
+.hero-srch-input:focus{border-color:rgba(255,255,255,.8);background:rgba(255,255,255,.22);box-shadow:0 0 0 4px rgba(255,255,255,.12)}
+
 @media(max-width:640px){
   .logo-txt{display:none}
   .hero{padding:22px 14px}
   .hero-stats{gap:18px}
+  .hero-search{padding:0}
   .filters-wrap{top:56px}
   .filter-lbl{min-width:auto}
   .grid-sec,.filters-inner{padding-left:12px;padding-right:12px}
@@ -144,12 +153,8 @@ input,select{font:inherit;color:inherit}
       </div>
       <span class="logo-txt">Excel<span>Formula</span> Book</span>
     </a>
-    <div class="srch-wrap">
-      <svg class="srch-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input class="srch-input" type="search" id="searchInput" placeholder="Search formula name, syntax or description…" autocomplete="off">
-    </div>
     <div class="hdr-right">
-      <span class="cnt-badge" id="resultCount">30 Formulas</span>
+      <span class="cnt-badge" id="resultCount">216 Formulas</span>
       <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
       </button>
@@ -161,10 +166,16 @@ input,select{font:inherit;color:inherit}
   <h1>📊 Excel Formula Reference Book</h1>
   <p>Complete guide to Excel formulas — syntax, examples, explanations &amp; Office version support. Search, filter &amp; copy instantly.</p>
   <div class="hero-stats">
-    <div><span class="stat-num" id="totalCount">30</span><span class="stat-lbl">Formulas</span></div>
+    <div><span class="stat-num" id="totalCount">216</span><span class="stat-lbl">Formulas</span></div>
     <div><span class="stat-num" id="categoryCount">...</span><span class="stat-lbl">Categories</span></div>
     <div><span class="stat-num" id="versionCount">...</span><span class="stat-lbl">Versions</span></div>
     <div><span class="stat-num">1-Click</span><span class="stat-lbl">Copy</span></div>
+  </div>
+  <div class="hero-search">
+    <div class="hero-srch-wrap">
+      <svg class="hero-srch-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="hero-srch-input" type="search" id="searchInput" placeholder="Search formula name, syntax or description…" autocomplete="off">
+    </div>
   </div>
 </section>
 
@@ -177,7 +188,7 @@ input,select{font:inherit;color:inherit}
 
 <div class="grid-sec">
   <div class="grid-hdr">
-    <div><div class="grid-title" id="gridTitle">All Formulas</div><div class="grid-sub" id="gridSub">Showing 30 of 30 formulas</div></div>
+    <div><div class="grid-title" id="gridTitle">All Formulas</div><div class="grid-sub" id="gridSub">Showing formulas</div></div>
     <select class="sort-sel" id="sortSel">
       <option value="default">Sort: Default</option>
       <option value="az">A → Z</option>
@@ -1229,6 +1240,694 @@ const FORMULAS = [
     "desc": "Returns sum-of-years-digits depreciation for a period.",
     "ex": "=SYD(12000, 2000, 5, 1)",
     "ver": "All Versions"
+  },
+  {
+    "name": "CUMPRINC",
+    "cat": "Financial",
+    "syntax": "CUMPRINC(rate, nper, pv, start_period, end_period, type)",
+    "desc": "Returns the cumulative principal paid on a loan between two periods.",
+    "ex": "=CUMPRINC(5%/12, 60, 25000, 1, 12, 0)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "CUMIPMT",
+    "cat": "Financial",
+    "syntax": "CUMIPMT(rate, nper, pv, start_period, end_period, type)",
+    "desc": "Returns the cumulative interest paid on a loan between two periods.",
+    "ex": "=CUMIPMT(5%/12, 60, 25000, 1, 12, 0)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DISC",
+    "cat": "Financial",
+    "syntax": "DISC(settlement, maturity, pr, redemption, [basis])",
+    "desc": "Returns the discount rate for a security.",
+    "ex": "=DISC(\"1/1/2026\", \"12/31/2026\", 97, 100)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "INTRATE",
+    "cat": "Financial",
+    "syntax": "INTRATE(settlement, maturity, investment, redemption, [basis])",
+    "desc": "Returns the interest rate for a fully invested security.",
+    "ex": "=INTRATE(\"1/1/2026\", \"12/31/2026\", 100, 110)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "YIELD",
+    "cat": "Financial",
+    "syntax": "YIELD(settlement, maturity, rate, pr, redemption, frequency, [basis])",
+    "desc": "Returns the yield of a security that pays periodic interest.",
+    "ex": "=YIELD(\"1/1/2026\", \"1/1/2031\", 5%, 95, 100, 2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "PRICE",
+    "cat": "Financial",
+    "syntax": "PRICE(settlement, maturity, rate, yld, redemption, frequency, [basis])",
+    "desc": "Returns the price per $100 face value of a security that pays periodic interest.",
+    "ex": "=PRICE(\"1/1/2026\", \"1/1/2031\", 5%, 6%, 100, 2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ACCRINT",
+    "cat": "Financial",
+    "syntax": "ACCRINT(issue, first_interest, settlement, rate, par, frequency, [basis])",
+    "desc": "Returns the accrued interest for a periodic-interest security.",
+    "ex": "=ACCRINT(\"1/1/2026\", \"6/1/2026\", \"3/1/2026\", 5%, 1000, 2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DB",
+    "cat": "Financial",
+    "syntax": "DB(cost, salvage, life, period, [month])",
+    "desc": "Returns the depreciation of an asset using the fixed-declining balance method.",
+    "ex": "=DB(10000, 1000, 5, 1)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DDB",
+    "cat": "Financial",
+    "syntax": "DDB(cost, salvage, life, period, [factor])",
+    "desc": "Returns the depreciation of an asset using the double-declining balance method.",
+    "ex": "=DDB(10000, 1000, 5, 1)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "MIRR",
+    "cat": "Financial",
+    "syntax": "MIRR(values, finance_rate, reinvest_rate)",
+    "desc": "Returns the modified internal rate of return using different rates for positive and negative cash flows.",
+    "ex": "=MIRR(B2:B8, 10%, 12%)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "LOG",
+    "cat": "Math & Trig",
+    "syntax": "LOG(number, [base])",
+    "desc": "Returns the logarithm of a number to the specified base.",
+    "ex": "=LOG(1000, 10) → 3",
+    "ver": "All Versions"
+  },
+  {
+    "name": "LOG10",
+    "cat": "Math & Trig",
+    "syntax": "LOG10(number)",
+    "desc": "Returns the base-10 logarithm of a number.",
+    "ex": "=LOG10(100) → 2",
+    "ver": "All Versions"
+  },
+  {
+    "name": "LN",
+    "cat": "Math & Trig",
+    "syntax": "LN(number)",
+    "desc": "Returns the natural logarithm of a number.",
+    "ex": "=LN(EXP(1)) → 1",
+    "ver": "All Versions"
+  },
+  {
+    "name": "EXP",
+    "cat": "Math & Trig",
+    "syntax": "EXP(number)",
+    "desc": "Returns e raised to the power of a number.",
+    "ex": "=EXP(1) → 2.71828…",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SIGN",
+    "cat": "Math & Trig",
+    "syntax": "SIGN(number)",
+    "desc": "Returns 1 for positive, -1 for negative, 0 for zero.",
+    "ex": "=SIGN(-42) → -1",
+    "ver": "All Versions"
+  },
+  {
+    "name": "TRUNC",
+    "cat": "Math & Trig",
+    "syntax": "TRUNC(number, [num_digits])",
+    "desc": "Truncates a number to an integer by removing the decimal part.",
+    "ex": "=TRUNC(8.9) → 8",
+    "ver": "All Versions"
+  },
+  {
+    "name": "EVEN",
+    "cat": "Math & Trig",
+    "syntax": "EVEN(number)",
+    "desc": "Rounds a number up to the nearest even integer.",
+    "ex": "=EVEN(3) → 4",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ODD",
+    "cat": "Math & Trig",
+    "syntax": "ODD(number)",
+    "desc": "Rounds a number up to the nearest odd integer.",
+    "ex": "=ODD(2) → 3",
+    "ver": "All Versions"
+  },
+  {
+    "name": "GCD",
+    "cat": "Math & Trig",
+    "syntax": "GCD(number1, [number2], ...)",
+    "desc": "Returns the greatest common divisor of two or more integers.",
+    "ex": "=GCD(12, 18) → 6",
+    "ver": "All Versions"
+  },
+  {
+    "name": "LCM",
+    "cat": "Math & Trig",
+    "syntax": "LCM(number1, [number2], ...)",
+    "desc": "Returns the least common multiple of two or more integers.",
+    "ex": "=LCM(4, 6) → 12",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ROMAN",
+    "cat": "Math & Trig",
+    "syntax": "ROMAN(number, [form])",
+    "desc": "Converts an Arabic numeral to Roman numeral text.",
+    "ex": "=ROMAN(2026) → MMXXVI",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ARABIC",
+    "cat": "Math & Trig",
+    "syntax": "ARABIC(text)",
+    "desc": "Converts a Roman numeral text string to an Arabic numeral.",
+    "ex": "=ARABIC(\"MMXXVI\") → 2026",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "PI",
+    "cat": "Math & Trig",
+    "syntax": "PI()",
+    "desc": "Returns the value of pi (3.14159265358979).",
+    "ex": "=PI() → 3.14159…",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SIN",
+    "cat": "Math & Trig",
+    "syntax": "SIN(number)",
+    "desc": "Returns the sine of an angle in radians.",
+    "ex": "=SIN(PI()/2) → 1",
+    "ver": "All Versions"
+  },
+  {
+    "name": "COS",
+    "cat": "Math & Trig",
+    "syntax": "COS(number)",
+    "desc": "Returns the cosine of an angle in radians.",
+    "ex": "=COS(0) → 1",
+    "ver": "All Versions"
+  },
+  {
+    "name": "TAN",
+    "cat": "Math & Trig",
+    "syntax": "TAN(number)",
+    "desc": "Returns the tangent of an angle in radians.",
+    "ex": "=TAN(PI()/4) → 1",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DEGREES",
+    "cat": "Math & Trig",
+    "syntax": "DEGREES(angle)",
+    "desc": "Converts radians to degrees.",
+    "ex": "=DEGREES(PI()) → 180",
+    "ver": "All Versions"
+  },
+  {
+    "name": "RADIANS",
+    "cat": "Math & Trig",
+    "syntax": "RADIANS(angle)",
+    "desc": "Converts degrees to radians.",
+    "ex": "=RADIANS(180) → 3.14159…",
+    "ver": "All Versions"
+  },
+  {
+    "name": "COMBIN",
+    "cat": "Math & Trig",
+    "syntax": "COMBIN(number, number_chosen)",
+    "desc": "Returns the number of combinations for a given number of items.",
+    "ex": "=COMBIN(5, 2) → 10",
+    "ver": "All Versions"
+  },
+  {
+    "name": "PERMUT",
+    "cat": "Math & Trig",
+    "syntax": "PERMUT(number, number_chosen)",
+    "desc": "Returns the number of permutations for a given number of objects.",
+    "ex": "=PERMUT(5, 2) → 20",
+    "ver": "All Versions"
+  },
+  {
+    "name": "FACT",
+    "cat": "Math & Trig",
+    "syntax": "FACT(number)",
+    "desc": "Returns the factorial of a number.",
+    "ex": "=FACT(5) → 120",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SEQUENCE",
+    "cat": "Math & Trig",
+    "syntax": "SEQUENCE(rows, [columns], [start], [step])",
+    "desc": "Generates an array of sequential numbers.",
+    "ex": "=SEQUENCE(5) → {1;2;3;4;5}",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "MMULT",
+    "cat": "Math & Trig",
+    "syntax": "MMULT(array1, array2)",
+    "desc": "Returns the matrix product of two arrays.",
+    "ex": "=MMULT(A1:B2, D1:E2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "AGGREGATE",
+    "cat": "Statistical",
+    "syntax": "AGGREGATE(function_num, options, ref1, [ref2])",
+    "desc": "Performs calculations ignoring errors or hidden rows. Supports 19 functions via function_num.",
+    "ex": "=AGGREGATE(9, 5, C2:C20) → Visible-row sum ignoring errors",
+    "ver": "Excel 2010+"
+  },
+  {
+    "name": "FORECAST.LINEAR",
+    "cat": "Statistical",
+    "syntax": "FORECAST.LINEAR(x, known_y's, known_x's)",
+    "desc": "Predicts a future value using linear regression.",
+    "ex": "=FORECAST.LINEAR(15, B2:B10, A2:A10)",
+    "ver": "Excel 2016+"
+  },
+  {
+    "name": "CORREL",
+    "cat": "Statistical",
+    "syntax": "CORREL(array1, array2)",
+    "desc": "Returns the correlation coefficient between two data sets.",
+    "ex": "=CORREL(A2:A20, B2:B20) → Correlation",
+    "ver": "All Versions"
+  },
+  {
+    "name": "COVARIANCE.S",
+    "cat": "Statistical",
+    "syntax": "COVARIANCE.S(array1, array2)",
+    "desc": "Returns sample covariance, the average of the products of deviations for each data-point pair.",
+    "ex": "=COVARIANCE.S(A2:A20, B2:B20)",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "SKEW",
+    "cat": "Statistical",
+    "syntax": "SKEW(number1, [number2], ...)",
+    "desc": "Returns the skewness of a distribution.",
+    "ex": "=SKEW(B2:B20)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "KURT",
+    "cat": "Statistical",
+    "syntax": "KURT(number1, [number2], ...)",
+    "desc": "Returns the kurtosis (peakedness) of a data set.",
+    "ex": "=KURT(B2:B20)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "NORM.DIST",
+    "cat": "Statistical",
+    "syntax": "NORM.DIST(x, mean, standard_dev, cumulative)",
+    "desc": "Returns the normal distribution for the specified mean and standard deviation.",
+    "ex": "=NORM.DIST(70, 65, 5, TRUE) → Probability ≤70",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "NORM.INV",
+    "cat": "Statistical",
+    "syntax": "NORM.INV(probability, mean, standard_dev)",
+    "desc": "Returns the inverse of the normal cumulative distribution.",
+    "ex": "=NORM.INV(0.9, 65, 5) → 90th-percentile score",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "T.DIST",
+    "cat": "Statistical",
+    "syntax": "T.DIST(x, deg_freedom, cumulative)",
+    "desc": "Returns the left-tailed Student's t-distribution.",
+    "ex": "=T.DIST(2, 30, TRUE)",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "T.TEST",
+    "cat": "Statistical",
+    "syntax": "T.TEST(array1, array2, tails, type)",
+    "desc": "Returns the probability associated with a Student's t-test.",
+    "ex": "=T.TEST(A2:A10, B2:B10, 2, 1)",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "LINEST",
+    "cat": "Statistical",
+    "syntax": "LINEST(known_y's, [known_x's], [const], [stats])",
+    "desc": "Returns statistics for a best-fit line using least-squares regression.",
+    "ex": "=LINEST(B2:B10, A2:A10, TRUE, TRUE)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "TREND",
+    "cat": "Statistical",
+    "syntax": "TREND(known_y's, [known_x's], [new_x's], [const])",
+    "desc": "Returns values along a linear trend fitted to known data.",
+    "ex": "=TREND(B2:B10, A2:A10, A11:A15)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "GROWTH",
+    "cat": "Statistical",
+    "syntax": "GROWTH(known_y's, [known_x's], [new_x's], [const])",
+    "desc": "Returns values along an exponential growth trend.",
+    "ex": "=GROWTH(B2:B10, A2:A10, A11:A15)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "TEXTSPLIT",
+    "cat": "Text",
+    "syntax": "TEXTSPLIT(text, col_delimiter, [row_delimiter], [ignore_empty], [match_mode], [pad_with])",
+    "desc": "Splits a text string into rows or columns by a delimiter.",
+    "ex": "=TEXTSPLIT(\"a,b,c\", \",\") → {a, b, c}",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "VALUETOTEXT",
+    "cat": "Text",
+    "syntax": "VALUETOTEXT(value, [format])",
+    "desc": "Returns text from any specified value.",
+    "ex": "=VALUETOTEXT(1234.5) → \"1234.5\"",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "CODE",
+    "cat": "Text",
+    "syntax": "CODE(text)",
+    "desc": "Returns the numeric code of the first character in a text string.",
+    "ex": "=CODE(\"A\") → 65",
+    "ver": "All Versions"
+  },
+  {
+    "name": "CHAR",
+    "cat": "Text",
+    "syntax": "CHAR(number)",
+    "desc": "Returns the character specified by a code number.",
+    "ex": "=CHAR(65) → A",
+    "ver": "All Versions"
+  },
+  {
+    "name": "REPT",
+    "cat": "Text",
+    "syntax": "REPT(text, number_times)",
+    "desc": "Repeats text a given number of times.",
+    "ex": "=REPT(\"*\", 5) → *****",
+    "ver": "All Versions"
+  },
+  {
+    "name": "VALUE",
+    "cat": "Text",
+    "syntax": "VALUE(text)",
+    "desc": "Converts a text string that represents a number to a number.",
+    "ex": "=VALUE(\"1,234\") → 1234",
+    "ver": "All Versions"
+  },
+  {
+    "name": "NUMBERVALUE",
+    "cat": "Text",
+    "syntax": "NUMBERVALUE(text, [decimal_separator], [group_separator])",
+    "desc": "Converts text to a number in a locale-independent way.",
+    "ex": "=NUMBERVALUE(\"1.234,56\", \",\", \".\") → 1234.56",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "UNICODE",
+    "cat": "Text",
+    "syntax": "UNICODE(text)",
+    "desc": "Returns the Unicode code point of the first character of a text string.",
+    "ex": "=UNICODE(\"€\") → 8364",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "UNICHAR",
+    "cat": "Text",
+    "syntax": "UNICHAR(number)",
+    "desc": "Returns the Unicode character that corresponds to a given number.",
+    "ex": "=UNICHAR(8364) → €",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "TEXTBEFORE",
+    "cat": "Text",
+    "syntax": "TEXTBEFORE(text, delimiter, [instance_num], [match_mode], [match_end], [if_not_found])",
+    "desc": "Returns text that occurs before a given character or string.",
+    "ex": "=TEXTBEFORE(\"one,two,three\", \",\") → one",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "TEXTAFTER",
+    "cat": "Text",
+    "syntax": "TEXTAFTER(text, delimiter, [instance_num], [match_mode], [match_end], [if_not_found])",
+    "desc": "Returns text that occurs after a given character or string.",
+    "ex": "=TEXTAFTER(\"one,two,three\", \",\") → two,three",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "DSUM",
+    "cat": "Database",
+    "syntax": "DSUM(database, field, criteria)",
+    "desc": "Adds numbers in a column of a list or database that match specified conditions.",
+    "ex": "=DSUM(A1:D10, \"Sales\", F1:F2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DAVERAGE",
+    "cat": "Database",
+    "syntax": "DAVERAGE(database, field, criteria)",
+    "desc": "Averages values in a column of a list or database that match specified conditions.",
+    "ex": "=DAVERAGE(A1:D10, \"Sales\", F1:F2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DCOUNT",
+    "cat": "Database",
+    "syntax": "DCOUNT(database, field, criteria)",
+    "desc": "Counts numeric cells in a column of a list or database that match specified conditions.",
+    "ex": "=DCOUNT(A1:D10, \"Sales\", F1:F2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DCOUNTA",
+    "cat": "Database",
+    "syntax": "DCOUNTA(database, field, criteria)",
+    "desc": "Counts non-empty cells in a column of a list or database that match specified conditions.",
+    "ex": "=DCOUNTA(A1:D10, \"Name\", F1:F2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DMAX",
+    "cat": "Database",
+    "syntax": "DMAX(database, field, criteria)",
+    "desc": "Returns the maximum value from a column of a list or database that matches specified conditions.",
+    "ex": "=DMAX(A1:D10, \"Sales\", F1:F2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DMIN",
+    "cat": "Database",
+    "syntax": "DMIN(database, field, criteria)",
+    "desc": "Returns the minimum value from a column of a list or database that matches specified conditions.",
+    "ex": "=DMIN(A1:D10, \"Sales\", F1:F2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DPRODUCT",
+    "cat": "Database",
+    "syntax": "DPRODUCT(database, field, criteria)",
+    "desc": "Multiplies values in a column of a list or database that match specified conditions.",
+    "ex": "=DPRODUCT(A1:D10, \"Units\", F1:F2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DSTDEV",
+    "cat": "Database",
+    "syntax": "DSTDEV(database, field, criteria)",
+    "desc": "Estimates the standard deviation of a sample from a column of a list or database that matches specified conditions.",
+    "ex": "=DSTDEV(A1:D10, \"Sales\", F1:F2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DVAR",
+    "cat": "Database",
+    "syntax": "DVAR(database, field, criteria)",
+    "desc": "Estimates variance based on a sample from a column of a list or database that matches specified conditions.",
+    "ex": "=DVAR(A1:D10, \"Sales\", F1:F2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DGET",
+    "cat": "Database",
+    "syntax": "DGET(database, field, criteria)",
+    "desc": "Extracts a single value from a column that matches specified conditions. Returns an error if multiple records match.",
+    "ex": "=DGET(A1:D10, \"ID\", F1:F2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "HEX2DEC",
+    "cat": "Engineering",
+    "syntax": "HEX2DEC(number)",
+    "desc": "Converts a hexadecimal number to decimal.",
+    "ex": "=HEX2DEC(\"FF\") → 255",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DEC2HEX",
+    "cat": "Engineering",
+    "syntax": "DEC2HEX(number, [places])",
+    "desc": "Converts a decimal number to hexadecimal.",
+    "ex": "=DEC2HEX(255) → FF",
+    "ver": "All Versions"
+  },
+  {
+    "name": "BIN2DEC",
+    "cat": "Engineering",
+    "syntax": "BIN2DEC(number)",
+    "desc": "Converts a binary number to decimal.",
+    "ex": "=BIN2DEC(\"1010\") → 10",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DEC2BIN",
+    "cat": "Engineering",
+    "syntax": "DEC2BIN(number, [places])",
+    "desc": "Converts a decimal number to binary.",
+    "ex": "=DEC2BIN(10) → 1010",
+    "ver": "All Versions"
+  },
+  {
+    "name": "OCT2DEC",
+    "cat": "Engineering",
+    "syntax": "OCT2DEC(number)",
+    "desc": "Converts an octal number to decimal.",
+    "ex": "=OCT2DEC(\"17\") → 15",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DEC2OCT",
+    "cat": "Engineering",
+    "syntax": "DEC2OCT(number, [places])",
+    "desc": "Converts a decimal number to octal.",
+    "ex": "=DEC2OCT(15) → 17",
+    "ver": "All Versions"
+  },
+  {
+    "name": "BIN2HEX",
+    "cat": "Engineering",
+    "syntax": "BIN2HEX(number, [places])",
+    "desc": "Converts a binary number to hexadecimal.",
+    "ex": "=BIN2HEX(\"11111111\") → FF",
+    "ver": "All Versions"
+  },
+  {
+    "name": "HEX2BIN",
+    "cat": "Engineering",
+    "syntax": "HEX2BIN(number, [places])",
+    "desc": "Converts a hexadecimal number to binary.",
+    "ex": "=HEX2BIN(\"FF\") → 11111111",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ISOWEEKNUM",
+    "cat": "Date & Time",
+    "syntax": "ISOWEEKNUM(date)",
+    "desc": "Returns the ISO week number of a date.",
+    "ex": "=ISOWEEKNUM(TODAY())",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "DAYS",
+    "cat": "Date & Time",
+    "syntax": "DAYS(end_date, start_date)",
+    "desc": "Returns the number of days between two dates.",
+    "ex": "=DAYS(B2, A2) → Day difference",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "DAYS360",
+    "cat": "Date & Time",
+    "syntax": "DAYS360(start_date, end_date, [method])",
+    "desc": "Calculates the number of days between two dates based on a 360-day year.",
+    "ex": "=DAYS360(A2, B2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DATEVALUE",
+    "cat": "Date & Time",
+    "syntax": "DATEVALUE(date_text)",
+    "desc": "Converts a date stored as text to a serial number.",
+    "ex": "=DATEVALUE(\"31-Mar-2026\")",
+    "ver": "All Versions"
+  },
+  {
+    "name": "WORKDAY.INTL",
+    "cat": "Date & Time",
+    "syntax": "WORKDAY.INTL(start_date, days, [weekend], [holidays])",
+    "desc": "Returns the date after a specified number of workdays with custom weekend settings.",
+    "ex": "=WORKDAY.INTL(A2, 10, 1, H2:H10)",
+    "ver": "Excel 2010+"
+  },
+  {
+    "name": "NETWORKDAYS.INTL",
+    "cat": "Date & Time",
+    "syntax": "NETWORKDAYS.INTL(start_date, end_date, [weekend], [holidays])",
+    "desc": "Returns the number of working days between two dates with custom weekend settings.",
+    "ex": "=NETWORKDAYS.INTL(A2, B2, 1, H2:H10)",
+    "ver": "Excel 2010+"
+  },
+  {
+    "name": "CELL",
+    "cat": "Information",
+    "syntax": "CELL(info_type, [reference])",
+    "desc": "Returns information about the formatting, location, or contents of a cell.",
+    "ex": "=CELL(\"address\", A1) → $A$1",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SHEET",
+    "cat": "Information",
+    "syntax": "SHEET([value])",
+    "desc": "Returns the sheet number of the referenced sheet.",
+    "ex": "=SHEET() → Current sheet number",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "SHEETS",
+    "cat": "Information",
+    "syntax": "SHEETS([reference])",
+    "desc": "Returns the number of sheets in a reference.",
+    "ex": "=SHEETS() → Total sheets in workbook",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "FORMULATEXT",
+    "cat": "Lookup & Reference",
+    "syntax": "FORMULATEXT(reference)",
+    "desc": "Returns the formula as a text string from a reference.",
+    "ex": "=FORMULATEXT(B2) → \"=SUM(A1:A10)\"",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "HYPERLINK",
+    "cat": "Lookup & Reference",
+    "syntax": "HYPERLINK(link_location, [friendly_name])",
+    "desc": "Creates a clickable shortcut to a URL, file path, or cell.",
+    "ex": "=HYPERLINK(\"https://example.com\", \"Visit\")",
+    "ver": "All Versions"
   }
 ];
 
@@ -1242,6 +1941,8 @@ const CAT_CFG = {
   'Date & Time': {cc:'#9d174d', cb:'#fce7f3', dot:'#ec4899'},
   'Information': {cc:'#92400e', cb:'#fef3c7', dot:'#f59e0b'},
   'Financial': {cc:'#7c2d12', cb:'#ffedd5', dot:'#f97316'},
+  'Database': {cc:'#1e3a5f', cb:'#dbeafe', dot:'#2563eb'},
+  'Engineering': {cc:'#374151', cb:'#f1f5f9', dot:'#64748b'},
 };
 const VER_CLS = {'All Versions':'v-all','Excel 2007+':'v-07','Excel 2013+':'v-13','Excel 2016+':'v-16','Excel 2019+':'v-19','Excel 2021+':'v-21','Excel 365':'v-365'};
 const VER_ICO = {'All':'📋','All Versions':'📋','Excel 2007+':'🟠','Excel 2013+':'🟢','Excel 2016+':'🟡','Excel 2019+':'🩷','Excel 2021+':'🟣','Excel 365':'⭐'};
