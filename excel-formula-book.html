@@ -162,8 +162,8 @@ input,select{font:inherit;color:inherit}
   <p>Complete guide to Excel formulas — syntax, examples, explanations &amp; Office version support. Search, filter &amp; copy instantly.</p>
   <div class="hero-stats">
     <div><span class="stat-num" id="totalCount">30</span><span class="stat-lbl">Formulas</span></div>
-    <div><span class="stat-num">8</span><span class="stat-lbl">Categories</span></div>
-    <div><span class="stat-num">7</span><span class="stat-lbl">Versions</span></div>
+    <div><span class="stat-num" id="categoryCount">...</span><span class="stat-lbl">Categories</span></div>
+    <div><span class="stat-num" id="versionCount">...</span><span class="stat-lbl">Versions</span></div>
     <div><span class="stat-num">1-Click</span><span class="stat-lbl">Copy</span></div>
   </div>
 </section>
@@ -190,144 +190,1246 @@ input,select{font:inherit;color:inherit}
 
 <script>
 const FORMULAS = [
-  {name:"SUM",cat:"Math & Trig",syntax:"SUM(number1, [number2], ...)",desc:"Adds all numbers in a range of cells or given values. The most frequently used Excel function — perfect for quick totals.",ex:"=SUM(A1:A10)  →  Returns total of A1:A10",ver:"All Versions"},
-  {name:"SUMIF",cat:"Math & Trig",syntax:"SUMIF(range, criteria, [sum_range])",desc:"Sums only cells that meet a single condition. The sum_range can differ from the criteria range.",ex:"=SUMIF(B2:B10,"Apples",C2:C10)  →  Sum sales for Apples",ver:"All Versions"},
-  {name:"SUMIFS",cat:"Math & Trig",syntax:"SUMIFS(sum_range, crit_range1, crit1, ...)",desc:"Adds cells meeting multiple conditions across different ranges. Supports up to 127 criteria pairs.",ex:"=SUMIFS(C2:C10,B2:B10,"Apples",D2:D10,">100")",ver:"Excel 2007+"},
-  {name:"ROUND",cat:"Math & Trig",syntax:"ROUND(number, num_digits)",desc:"Rounds a number to a specified number of decimal places. Positive = decimals, negative = tens/hundreds.",ex:"=ROUND(3.14159, 2)  →  3.14",ver:"All Versions"},
-  {name:"ABS",cat:"Math & Trig",syntax:"ABS(number)",desc:"Returns the absolute (positive) value of a number, removing any negative sign. Useful for distance calculations.",ex:"=ABS(-42)  →  42",ver:"All Versions"},
-  {name:"MOD",cat:"Math & Trig",syntax:"MOD(number, divisor)",desc:"Returns the remainder after dividing a number by the divisor. The sign matches the divisor.",ex:"=MOD(10, 3)  →  1",ver:"All Versions"},
-  {name:"AVERAGE",cat:"Statistical",syntax:"AVERAGE(number1, [number2], ...)",desc:"Returns the arithmetic mean of its arguments. Text and logical values in referenced cells are ignored.",ex:"=AVERAGE(B2:B20)  →  Mean of B2:B20",ver:"All Versions"},
-  {name:"AVERAGEIF",cat:"Statistical",syntax:"AVERAGEIF(range, criteria, [avg_range])",desc:"Returns the average of cells that meet a given condition. If avg_range is omitted, the criteria range is used.",ex:"=AVERAGEIF(A2:A10,">50",B2:B10)",ver:"Excel 2007+"},
-  {name:"COUNT",cat:"Statistical",syntax:"COUNT(value1, [value2], ...)",desc:"Counts the number of cells containing numbers. Text, blanks and logical values are excluded.",ex:"=COUNT(A1:A20)  →  Number of numeric cells",ver:"All Versions"},
-  {name:"COUNTIF",cat:"Statistical",syntax:"COUNTIF(range, criteria)",desc:"Counts cells in a range that meet a single condition. Supports wildcard characters (* and ?).",ex:"=COUNTIF(A1:A50,"Pass")  →  Count of Pass",ver:"All Versions"},
-  {name:"COUNTIFS",cat:"Statistical",syntax:"COUNTIFS(range1, crit1, [range2, crit2], ...)",desc:"Counts cells meeting multiple criteria across different ranges. All criteria must be met simultaneously.",ex:"=COUNTIFS(A2:A10,"Male",B2:B10,">30")",ver:"Excel 2007+"},
-  {name:"MAX",cat:"Statistical",syntax:"MAX(number1, [number2], ...)",desc:"Returns the largest value in a set of values. Logical values and text are ignored in cell references.",ex:"=MAX(C1:C100)  →  Highest value in range",ver:"All Versions"},
-  {name:"MIN",cat:"Statistical",syntax:"MIN(number1, [number2], ...)",desc:"Returns the smallest value in a set of values. Logical values and text in cell references are ignored.",ex:"=MIN(C1:C100)  →  Lowest value in range",ver:"All Versions"},
-  {name:"LEFT",cat:"Text",syntax:"LEFT(text, [num_chars])",desc:"Returns the first N characters from the left of a text string. Default is 1 character if num_chars is omitted.",ex:"=LEFT("ExcelFormula", 5)  →  "Excel"",ver:"All Versions"},
-  {name:"RIGHT",cat:"Text",syntax:"RIGHT(text, [num_chars])",desc:"Returns the last N characters from the right of a text string. Default is 1 character if num_chars is omitted.",ex:"=RIGHT("ExcelFormula", 7)  →  "Formula"",ver:"All Versions"},
-  {name:"MID",cat:"Text",syntax:"MID(text, start_num, num_chars)",desc:"Returns a specific number of characters from a text string starting at a given position.",ex:"=MID("ExcelFormula", 6, 7)  →  "Formula"",ver:"All Versions"},
-  {name:"LEN",cat:"Text",syntax:"LEN(text)",desc:"Returns the total number of characters in a text string, including spaces and special characters.",ex:"=LEN("Hello World")  →  11",ver:"All Versions"},
-  {name:"TRIM",cat:"Text",syntax:"TRIM(text)",desc:"Removes all extra spaces from a text string except for single spaces between words. Essential for cleaning imported data.",ex:"=TRIM("  Hello   World  ")  →  "Hello World"",ver:"All Versions"},
-  {name:"TEXTJOIN",cat:"Text",syntax:"TEXTJOIN(delimiter, ignore_empty, text1, ...)",desc:"Joins text from multiple ranges/strings with a specified delimiter. Can optionally ignore empty cells.",ex:"=TEXTJOIN(", ", TRUE, A1:A5)  →  "A, B, C, D, E"",ver:"Excel 2019+"},
-  {name:"UPPER",cat:"Text",syntax:"UPPER(text)",desc:"Converts all characters in a text string to UPPERCASE letters.",ex:"=UPPER("hello world")  →  "HELLO WORLD"",ver:"All Versions"},
-  {name:"IF",cat:"Logical",syntax:"IF(logical_test, value_if_true, [value_if_false])",desc:"The foundation of conditional logic. Checks a condition and returns one value for TRUE, another for FALSE.",ex:"=IF(A1>100,"High","Low")  →  "High" or "Low"",ver:"All Versions"},
-  {name:"IFS",cat:"Logical",syntax:"IFS(cond1, val1, [cond2, val2], ...)",desc:"Checks multiple conditions and returns the value for the first TRUE condition. Replaces complex nested IFs.",ex:"=IFS(A1>=90,"A",A1>=80,"B",A1>=70,"C",TRUE,"F")",ver:"Excel 2019+"},
-  {name:"IFERROR",cat:"Logical",syntax:"IFERROR(value, value_if_error)",desc:"Returns a custom result if a formula evaluates to any error; otherwise returns the formula result. Great for VLOOKUP error handling.",ex:"=IFERROR(A1/B1, 0)  →  Returns 0 on error",ver:"Excel 2007+"},
-  {name:"AND",cat:"Logical",syntax:"AND(logical1, [logical2], ...)",desc:"Returns TRUE only if ALL arguments evaluate to TRUE. Often nested inside IF for multi-condition tests.",ex:"=AND(A1>10, A1<100)  →  TRUE if 10 < A1 < 100",ver:"All Versions"},
-  {name:"VLOOKUP",cat:"Lookup & Reference",syntax:"VLOOKUP(lookup_val, table, col_index, [range_lookup])",desc:"Searches for a value in the leftmost column of a table and returns a value from a specified column in the same row. Use FALSE for exact match.",ex:"=VLOOKUP("Smith",A2:D100,3,FALSE)  →  Smith\'s salary",ver:"All Versions"},
-  {name:"INDEX",cat:"Lookup & Reference",syntax:"INDEX(array, row_num, [col_num])",desc:"Returns the value at a given position in a range or array. Most powerful when combined with MATCH for flexible lookups.",ex:"=INDEX(B2:B100, 5)  →  5th value in range B2:B100",ver:"All Versions"},
-  {name:"MATCH",cat:"Lookup & Reference",syntax:"MATCH(lookup_val, lookup_array, [match_type])",desc:"Returns the relative position of a value in an array. Use match_type = 0 for exact match. Pairs perfectly with INDEX.",ex:"=MATCH("John", A1:A50, 0)  →  Row position of John",ver:"All Versions"},
-  {name:"XLOOKUP",cat:"Lookup & Reference",syntax:"XLOOKUP(lookup_val, lookup_arr, return_arr, [if_not_found], ...)",desc:"Modern replacement for VLOOKUP & HLOOKUP. Searches any direction, returns multiple columns, with a built-in not-found value.",ex:"=XLOOKUP("Smith",A2:A100,C2:C100,"Not found")",ver:"Excel 365"},
-  {name:"TODAY",cat:"Date & Time",syntax:"TODAY()",desc:"Returns today\'s date as a serial number. Recalculates automatically every time the workbook opens or is recalculated.",ex:"=TODAY()  →  31/03/2026 (current date)",ver:"All Versions"},
-  {name:"ISBLANK",cat:"Information",syntax:"ISBLANK(value)",desc:"Returns TRUE if the referenced cell is completely empty. Returns FALSE if it contains any value, even an empty text string ("").",ex:"=ISBLANK(A1)  →  TRUE if A1 is empty",ver:"All Versions"}
+  {
+    "name": "SUM",
+    "cat": "Math & Trig",
+    "syntax": "SUM(number1, [number2], ...)",
+    "desc": "Adds values from cells, ranges, or constants to return a total.",
+    "ex": "=SUM(A1:A10) → Total of A1:A10",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SUMIF",
+    "cat": "Math & Trig",
+    "syntax": "SUMIF(range, criteria, [sum_range])",
+    "desc": "Adds values that meet one condition.",
+    "ex": "=SUMIF(B2:B10, \"Apples\", C2:C10) → Sum for Apples",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SUMIFS",
+    "cat": "Math & Trig",
+    "syntax": "SUMIFS(sum_range, criteria_range1, criteria1, ...)",
+    "desc": "Adds values that meet multiple conditions.",
+    "ex": "=SUMIFS(C2:C10, B2:B10, \"Apples\", D2:D10, \">100\")",
+    "ver": "Excel 2007+"
+  },
+  {
+    "name": "ROUND",
+    "cat": "Math & Trig",
+    "syntax": "ROUND(number, num_digits)",
+    "desc": "Rounds a number to the requested decimal place.",
+    "ex": "=ROUND(3.14159, 2) → 3.14",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ABS",
+    "cat": "Math & Trig",
+    "syntax": "ABS(number)",
+    "desc": "Returns the absolute value of a number.",
+    "ex": "=ABS(-42) → 42",
+    "ver": "All Versions"
+  },
+  {
+    "name": "MOD",
+    "cat": "Math & Trig",
+    "syntax": "MOD(number, divisor)",
+    "desc": "Returns the remainder after division.",
+    "ex": "=MOD(10, 3) → 1",
+    "ver": "All Versions"
+  },
+  {
+    "name": "PRODUCT",
+    "cat": "Math & Trig",
+    "syntax": "PRODUCT(number1, [number2], ...)",
+    "desc": "Multiplies the supplied numbers or ranges together.",
+    "ex": "=PRODUCT(A1:A3) → A1×A2×A3",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ROUNDUP",
+    "cat": "Math & Trig",
+    "syntax": "ROUNDUP(number, num_digits)",
+    "desc": "Rounds a number away from zero.",
+    "ex": "=ROUNDUP(12.341, 2) → 12.35",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ROUNDDOWN",
+    "cat": "Math & Trig",
+    "syntax": "ROUNDDOWN(number, num_digits)",
+    "desc": "Rounds a number toward zero.",
+    "ex": "=ROUNDDOWN(12.349, 2) → 12.34",
+    "ver": "All Versions"
+  },
+  {
+    "name": "INT",
+    "cat": "Math & Trig",
+    "syntax": "INT(number)",
+    "desc": "Rounds a number down to the nearest integer.",
+    "ex": "=INT(8.9) → 8",
+    "ver": "All Versions"
+  },
+  {
+    "name": "CEILING",
+    "cat": "Math & Trig",
+    "syntax": "CEILING(number, significance)",
+    "desc": "Rounds a number up to the nearest multiple of significance.",
+    "ex": "=CEILING(27, 5) → 30",
+    "ver": "All Versions"
+  },
+  {
+    "name": "FLOOR",
+    "cat": "Math & Trig",
+    "syntax": "FLOOR(number, significance)",
+    "desc": "Rounds a number down to the nearest multiple of significance.",
+    "ex": "=FLOOR(27, 5) → 25",
+    "ver": "All Versions"
+  },
+  {
+    "name": "POWER",
+    "cat": "Math & Trig",
+    "syntax": "POWER(number, power)",
+    "desc": "Raises a number to a power.",
+    "ex": "=POWER(5, 3) → 125",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SQRT",
+    "cat": "Math & Trig",
+    "syntax": "SQRT(number)",
+    "desc": "Returns the square root of a positive number.",
+    "ex": "=SQRT(144) → 12",
+    "ver": "All Versions"
+  },
+  {
+    "name": "RAND",
+    "cat": "Math & Trig",
+    "syntax": "RAND()",
+    "desc": "Returns a random decimal between 0 and 1.",
+    "ex": "=RAND() → 0.527...",
+    "ver": "All Versions"
+  },
+  {
+    "name": "RANDBETWEEN",
+    "cat": "Math & Trig",
+    "syntax": "RANDBETWEEN(bottom, top)",
+    "desc": "Returns a random integer between the specified bounds.",
+    "ex": "=RANDBETWEEN(1, 100) → Random whole number",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SUBTOTAL",
+    "cat": "Math & Trig",
+    "syntax": "SUBTOTAL(function_num, ref1, [ref2], ...)",
+    "desc": "Calculates a subtotal and can ignore filtered or hidden rows.",
+    "ex": "=SUBTOTAL(9, C2:C20) → Visible-row sum",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SUMPRODUCT",
+    "cat": "Math & Trig",
+    "syntax": "SUMPRODUCT(array1, [array2], ...)",
+    "desc": "Multiplies matching components in arrays and adds the results.",
+    "ex": "=SUMPRODUCT(B2:B6, C2:C6) → Weighted total",
+    "ver": "All Versions"
+  },
+  {
+    "name": "AVERAGE",
+    "cat": "Statistical",
+    "syntax": "AVERAGE(number1, [number2], ...)",
+    "desc": "Returns the arithmetic mean of the supplied values.",
+    "ex": "=AVERAGE(B2:B20) → Mean of B2:B20",
+    "ver": "All Versions"
+  },
+  {
+    "name": "AVERAGEIF",
+    "cat": "Statistical",
+    "syntax": "AVERAGEIF(range, criteria, [average_range])",
+    "desc": "Returns the average of cells that meet one condition.",
+    "ex": "=AVERAGEIF(A2:A10, \">50\", B2:B10)",
+    "ver": "Excel 2007+"
+  },
+  {
+    "name": "AVERAGEIFS",
+    "cat": "Statistical",
+    "syntax": "AVERAGEIFS(average_range, criteria_range1, criteria1, ...)",
+    "desc": "Returns the average of cells that satisfy multiple conditions.",
+    "ex": "=AVERAGEIFS(C2:C10, A2:A10, \"North\", B2:B10, \">100\")",
+    "ver": "Excel 2007+"
+  },
+  {
+    "name": "COUNT",
+    "cat": "Statistical",
+    "syntax": "COUNT(value1, [value2], ...)",
+    "desc": "Counts numeric cells and numeric values.",
+    "ex": "=COUNT(A1:A20) → Number of numeric cells",
+    "ver": "All Versions"
+  },
+  {
+    "name": "COUNTA",
+    "cat": "Statistical",
+    "syntax": "COUNTA(value1, [value2], ...)",
+    "desc": "Counts non-empty cells of any type.",
+    "ex": "=COUNTA(A1:A20) → Filled cells count",
+    "ver": "All Versions"
+  },
+  {
+    "name": "COUNTBLANK",
+    "cat": "Statistical",
+    "syntax": "COUNTBLANK(range)",
+    "desc": "Counts empty cells in a range.",
+    "ex": "=COUNTBLANK(A1:A20) → Blank cells count",
+    "ver": "All Versions"
+  },
+  {
+    "name": "COUNTIF",
+    "cat": "Statistical",
+    "syntax": "COUNTIF(range, criteria)",
+    "desc": "Counts cells that meet one condition.",
+    "ex": "=COUNTIF(A1:A50, \"Pass\") → Count of Pass",
+    "ver": "All Versions"
+  },
+  {
+    "name": "COUNTIFS",
+    "cat": "Statistical",
+    "syntax": "COUNTIFS(criteria_range1, criteria1, ...)",
+    "desc": "Counts cells that meet multiple conditions.",
+    "ex": "=COUNTIFS(A2:A10, \"Male\", B2:B10, \">30\")",
+    "ver": "Excel 2007+"
+  },
+  {
+    "name": "MAX",
+    "cat": "Statistical",
+    "syntax": "MAX(number1, [number2], ...)",
+    "desc": "Returns the largest number in a set.",
+    "ex": "=MAX(C1:C100) → Highest value",
+    "ver": "All Versions"
+  },
+  {
+    "name": "MIN",
+    "cat": "Statistical",
+    "syntax": "MIN(number1, [number2], ...)",
+    "desc": "Returns the smallest number in a set.",
+    "ex": "=MIN(C1:C100) → Lowest value",
+    "ver": "All Versions"
+  },
+  {
+    "name": "LARGE",
+    "cat": "Statistical",
+    "syntax": "LARGE(array, k)",
+    "desc": "Returns the kth largest value in a range.",
+    "ex": "=LARGE(B2:B20, 3) → 3rd highest value",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SMALL",
+    "cat": "Statistical",
+    "syntax": "SMALL(array, k)",
+    "desc": "Returns the kth smallest value in a range.",
+    "ex": "=SMALL(B2:B20, 2) → 2nd lowest value",
+    "ver": "All Versions"
+  },
+  {
+    "name": "MEDIAN",
+    "cat": "Statistical",
+    "syntax": "MEDIAN(number1, [number2], ...)",
+    "desc": "Returns the middle number in a set of values.",
+    "ex": "=MEDIAN(C2:C30) → Median value",
+    "ver": "All Versions"
+  },
+  {
+    "name": "MODE.SNGL",
+    "cat": "Statistical",
+    "syntax": "MODE.SNGL(number1, [number2], ...)",
+    "desc": "Returns the most frequently occurring number.",
+    "ex": "=MODE.SNGL(A2:A20) → Most common value",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "STDEV.S",
+    "cat": "Statistical",
+    "syntax": "STDEV.S(number1, [number2], ...)",
+    "desc": "Estimates standard deviation using a sample.",
+    "ex": "=STDEV.S(B2:B20) → Sample deviation",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "STDEV.P",
+    "cat": "Statistical",
+    "syntax": "STDEV.P(number1, [number2], ...)",
+    "desc": "Calculates standard deviation for an entire population.",
+    "ex": "=STDEV.P(B2:B20) → Population deviation",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "VAR.S",
+    "cat": "Statistical",
+    "syntax": "VAR.S(number1, [number2], ...)",
+    "desc": "Estimates variance based on a sample.",
+    "ex": "=VAR.S(B2:B20) → Sample variance",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "PERCENTILE.INC",
+    "cat": "Statistical",
+    "syntax": "PERCENTILE.INC(array, k)",
+    "desc": "Returns the inclusive kth percentile of values.",
+    "ex": "=PERCENTILE.INC(B2:B20, 0.9) → 90th percentile",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "QUARTILE.INC",
+    "cat": "Statistical",
+    "syntax": "QUARTILE.INC(array, quart)",
+    "desc": "Returns a data set quartile using inclusive boundaries.",
+    "ex": "=QUARTILE.INC(B2:B20, 1) → First quartile",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "RANK.EQ",
+    "cat": "Statistical",
+    "syntax": "RANK.EQ(number, ref, [order])",
+    "desc": "Returns the rank of a number within a list.",
+    "ex": "=RANK.EQ(B2, B$2:B$20, 0) → Descending rank",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "LEFT",
+    "cat": "Text",
+    "syntax": "LEFT(text, [num_chars])",
+    "desc": "Returns characters from the start of a text string.",
+    "ex": "=LEFT(\"ExcelFormula\", 5) → Excel",
+    "ver": "All Versions"
+  },
+  {
+    "name": "RIGHT",
+    "cat": "Text",
+    "syntax": "RIGHT(text, [num_chars])",
+    "desc": "Returns characters from the end of a text string.",
+    "ex": "=RIGHT(\"ExcelFormula\", 7) → Formula",
+    "ver": "All Versions"
+  },
+  {
+    "name": "MID",
+    "cat": "Text",
+    "syntax": "MID(text, start_num, num_chars)",
+    "desc": "Returns characters from the middle of a text string.",
+    "ex": "=MID(\"ExcelFormula\", 6, 7) → Formula",
+    "ver": "All Versions"
+  },
+  {
+    "name": "LEN",
+    "cat": "Text",
+    "syntax": "LEN(text)",
+    "desc": "Counts characters in a text string, including spaces.",
+    "ex": "=LEN(\"Hello World\") → 11",
+    "ver": "All Versions"
+  },
+  {
+    "name": "TRIM",
+    "cat": "Text",
+    "syntax": "TRIM(text)",
+    "desc": "Removes extra spaces while leaving single spaces between words.",
+    "ex": "=TRIM(\"  Hello   World  \") → Hello World",
+    "ver": "All Versions"
+  },
+  {
+    "name": "TEXTJOIN",
+    "cat": "Text",
+    "syntax": "TEXTJOIN(delimiter, ignore_empty, text1, ...)",
+    "desc": "Combines text using a delimiter and can ignore blanks.",
+    "ex": "=TEXTJOIN(\", \", TRUE, A1:A5) → A, B, C",
+    "ver": "Excel 2019+"
+  },
+  {
+    "name": "CONCAT",
+    "cat": "Text",
+    "syntax": "CONCAT(text1, [text2], ...)",
+    "desc": "Joins text strings and ranges into one result.",
+    "ex": "=CONCAT(A2, \" \", B2) → Full name",
+    "ver": "Excel 2019+"
+  },
+  {
+    "name": "CONCATENATE",
+    "cat": "Text",
+    "syntax": "CONCATENATE(text1, [text2], ...)",
+    "desc": "Legacy function for combining text strings.",
+    "ex": "=CONCATENATE(A2, \"-\", B2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "UPPER",
+    "cat": "Text",
+    "syntax": "UPPER(text)",
+    "desc": "Converts text to uppercase.",
+    "ex": "=UPPER(\"hello\") → HELLO",
+    "ver": "All Versions"
+  },
+  {
+    "name": "LOWER",
+    "cat": "Text",
+    "syntax": "LOWER(text)",
+    "desc": "Converts text to lowercase.",
+    "ex": "=LOWER(\"HELLO\") → hello",
+    "ver": "All Versions"
+  },
+  {
+    "name": "PROPER",
+    "cat": "Text",
+    "syntax": "PROPER(text)",
+    "desc": "Capitalizes the first letter of each word.",
+    "ex": "=PROPER(\"excel formula book\") → Excel Formula Book",
+    "ver": "All Versions"
+  },
+  {
+    "name": "TEXT",
+    "cat": "Text",
+    "syntax": "TEXT(value, format_text)",
+    "desc": "Formats a number or date as text.",
+    "ex": "=TEXT(TODAY(), \"dd-mmm-yyyy\")",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SUBSTITUTE",
+    "cat": "Text",
+    "syntax": "SUBSTITUTE(text, old_text, new_text, [instance_num])",
+    "desc": "Replaces matching text in a string.",
+    "ex": "=SUBSTITUTE(A2, \"Ltd\", \"Limited\")",
+    "ver": "All Versions"
+  },
+  {
+    "name": "REPLACE",
+    "cat": "Text",
+    "syntax": "REPLACE(old_text, start_num, num_chars, new_text)",
+    "desc": "Replaces text by position and length.",
+    "ex": "=REPLACE(A2, 1, 3, \"INV\")",
+    "ver": "All Versions"
+  },
+  {
+    "name": "FIND",
+    "cat": "Text",
+    "syntax": "FIND(find_text, within_text, [start_num])",
+    "desc": "Finds text position with case sensitivity.",
+    "ex": "=FIND(\"@\", A2) → Position of @",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SEARCH",
+    "cat": "Text",
+    "syntax": "SEARCH(find_text, within_text, [start_num])",
+    "desc": "Finds text position without case sensitivity.",
+    "ex": "=SEARCH(\"excel\", A2) → Match position",
+    "ver": "All Versions"
+  },
+  {
+    "name": "CLEAN",
+    "cat": "Text",
+    "syntax": "CLEAN(text)",
+    "desc": "Removes non-printable characters from text.",
+    "ex": "=CLEAN(A2) → Cleaned text",
+    "ver": "All Versions"
+  },
+  {
+    "name": "EXACT",
+    "cat": "Text",
+    "syntax": "EXACT(text1, text2)",
+    "desc": "Checks whether two text values match exactly.",
+    "ex": "=EXACT(A2, B2) → TRUE if identical",
+    "ver": "All Versions"
+  },
+  {
+    "name": "IF",
+    "cat": "Logical",
+    "syntax": "IF(logical_test, value_if_true, [value_if_false])",
+    "desc": "Returns one result when a condition is true and another when false.",
+    "ex": "=IF(A1>100, \"High\", \"Low\")",
+    "ver": "All Versions"
+  },
+  {
+    "name": "IFS",
+    "cat": "Logical",
+    "syntax": "IFS(logical_test1, value_if_true1, ...)",
+    "desc": "Tests multiple conditions in order and returns the first match.",
+    "ex": "=IFS(A1>=90, \"A\", A1>=80, \"B\", TRUE, \"F\")",
+    "ver": "Excel 2019+"
+  },
+  {
+    "name": "IFERROR",
+    "cat": "Logical",
+    "syntax": "IFERROR(value, value_if_error)",
+    "desc": "Returns a fallback when a formula results in any error.",
+    "ex": "=IFERROR(A1/B1, 0) → 0 on error",
+    "ver": "Excel 2007+"
+  },
+  {
+    "name": "IFNA",
+    "cat": "Logical",
+    "syntax": "IFNA(value, value_if_na)",
+    "desc": "Returns a fallback only when a formula returns #N/A.",
+    "ex": "=IFNA(VLOOKUP(E2, A:B, 2, FALSE), \"Not found\")",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "AND",
+    "cat": "Logical",
+    "syntax": "AND(logical1, [logical2], ...)",
+    "desc": "Returns TRUE only when all conditions are true.",
+    "ex": "=AND(A1>10, A1<100)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "OR",
+    "cat": "Logical",
+    "syntax": "OR(logical1, [logical2], ...)",
+    "desc": "Returns TRUE when any supplied condition is true.",
+    "ex": "=OR(B2=\"Yes\", C2=\"Approved\")",
+    "ver": "All Versions"
+  },
+  {
+    "name": "NOT",
+    "cat": "Logical",
+    "syntax": "NOT(logical)",
+    "desc": "Reverses TRUE to FALSE and FALSE to TRUE.",
+    "ex": "=NOT(A2=\"Closed\")",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SWITCH",
+    "cat": "Logical",
+    "syntax": "SWITCH(expression, value1, result1, [default])",
+    "desc": "Matches an expression to values and returns the matching result.",
+    "ex": "=SWITCH(B2, \"N\", \"North\", \"S\", \"South\", \"Other\")",
+    "ver": "Excel 2019+"
+  },
+  {
+    "name": "XOR",
+    "cat": "Logical",
+    "syntax": "XOR(logical1, [logical2], ...)",
+    "desc": "Returns TRUE when an odd number of conditions are true.",
+    "ex": "=XOR(A2>0, B2>0)",
+    "ver": "Excel 2013+"
+  },
+  {
+    "name": "LET",
+    "cat": "Logical",
+    "syntax": "LET(name1, value1, calculation)",
+    "desc": "Assigns names to calculations so formulas are shorter and faster to read.",
+    "ex": "=LET(total, SUM(B2:B10), total*0.1)",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "VLOOKUP",
+    "cat": "Lookup & Reference",
+    "syntax": "VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup])",
+    "desc": "Looks up a value in the first column of a table and returns a value from another column.",
+    "ex": "=VLOOKUP(\"Smith\", A2:D100, 3, FALSE)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "HLOOKUP",
+    "cat": "Lookup & Reference",
+    "syntax": "HLOOKUP(lookup_value, table_array, row_index_num, [range_lookup])",
+    "desc": "Looks up a value in the first row of a table and returns a value from another row.",
+    "ex": "=HLOOKUP(\"Q2\", A1:F4, 3, FALSE)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "INDEX",
+    "cat": "Lookup & Reference",
+    "syntax": "INDEX(array, row_num, [column_num])",
+    "desc": "Returns a value by row and column position.",
+    "ex": "=INDEX(B2:B100, 5) → 5th value",
+    "ver": "All Versions"
+  },
+  {
+    "name": "MATCH",
+    "cat": "Lookup & Reference",
+    "syntax": "MATCH(lookup_value, lookup_array, [match_type])",
+    "desc": "Returns the relative position of a lookup value in a range.",
+    "ex": "=MATCH(\"John\", A1:A50, 0) → Exact match row",
+    "ver": "All Versions"
+  },
+  {
+    "name": "XLOOKUP",
+    "cat": "Lookup & Reference",
+    "syntax": "XLOOKUP(lookup_value, lookup_array, return_array, [if_not_found], [match_mode], [search_mode])",
+    "desc": "Modern flexible lookup that can search any direction.",
+    "ex": "=XLOOKUP(E2, A2:A100, C2:C100, \"Not found\")",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "XMATCH",
+    "cat": "Lookup & Reference",
+    "syntax": "XMATCH(lookup_value, lookup_array, [match_mode], [search_mode])",
+    "desc": "Returns the relative position of a lookup value with more matching options.",
+    "ex": "=XMATCH(E2, A2:A100, 0)",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "LOOKUP",
+    "cat": "Lookup & Reference",
+    "syntax": "LOOKUP(lookup_value, lookup_vector, [result_vector])",
+    "desc": "Returns a value from a one-row or one-column range.",
+    "ex": "=LOOKUP(95, A2:A10, B2:B10)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "OFFSET",
+    "cat": "Lookup & Reference",
+    "syntax": "OFFSET(reference, rows, cols, [height], [width])",
+    "desc": "Returns a reference shifted from a starting cell or range.",
+    "ex": "=SUM(OFFSET(A1, 1, 0, 5, 1))",
+    "ver": "All Versions"
+  },
+  {
+    "name": "CHOOSE",
+    "cat": "Lookup & Reference",
+    "syntax": "CHOOSE(index_num, value1, [value2], ...)",
+    "desc": "Returns a value from a list by numeric position.",
+    "ex": "=CHOOSE(2, \"Low\", \"Medium\", \"High\") → Medium",
+    "ver": "All Versions"
+  },
+  {
+    "name": "INDIRECT",
+    "cat": "Lookup & Reference",
+    "syntax": "INDIRECT(ref_text, [a1])",
+    "desc": "Turns text into a live cell or range reference.",
+    "ex": "=SUM(INDIRECT(\"B2:B10\"))",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ADDRESS",
+    "cat": "Lookup & Reference",
+    "syntax": "ADDRESS(row_num, column_num, [abs_num], [a1], [sheet_text])",
+    "desc": "Returns a cell reference as text.",
+    "ex": "=ADDRESS(5, 3) → $C$5",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ROW",
+    "cat": "Lookup & Reference",
+    "syntax": "ROW([reference])",
+    "desc": "Returns the row number of a reference.",
+    "ex": "=ROW(C5) → 5",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ROWS",
+    "cat": "Lookup & Reference",
+    "syntax": "ROWS(array)",
+    "desc": "Counts the number of rows in a range or array.",
+    "ex": "=ROWS(A2:C10) → 9",
+    "ver": "All Versions"
+  },
+  {
+    "name": "COLUMN",
+    "cat": "Lookup & Reference",
+    "syntax": "COLUMN([reference])",
+    "desc": "Returns the column number of a reference.",
+    "ex": "=COLUMN(C5) → 3",
+    "ver": "All Versions"
+  },
+  {
+    "name": "COLUMNS",
+    "cat": "Lookup & Reference",
+    "syntax": "COLUMNS(array)",
+    "desc": "Counts the number of columns in a range or array.",
+    "ex": "=COLUMNS(A2:C10) → 3",
+    "ver": "All Versions"
+  },
+  {
+    "name": "TRANSPOSE",
+    "cat": "Lookup & Reference",
+    "syntax": "TRANSPOSE(array)",
+    "desc": "Flips rows into columns and columns into rows.",
+    "ex": "=TRANSPOSE(A1:C3)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "FILTER",
+    "cat": "Lookup & Reference",
+    "syntax": "FILTER(array, include, [if_empty])",
+    "desc": "Returns only the rows or columns that match a condition.",
+    "ex": "=FILTER(A2:D20, D2:D20=\"Open\", \"No matches\")",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "SORT",
+    "cat": "Lookup & Reference",
+    "syntax": "SORT(array, [sort_index], [sort_order], [by_col])",
+    "desc": "Sorts a range or array dynamically.",
+    "ex": "=SORT(A2:C20, 2, -1)",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "SORTBY",
+    "cat": "Lookup & Reference",
+    "syntax": "SORTBY(array, by_array1, [sort_order1], ...)",
+    "desc": "Sorts a range by another range or array.",
+    "ex": "=SORTBY(A2:C20, C2:C20, -1)",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "UNIQUE",
+    "cat": "Lookup & Reference",
+    "syntax": "UNIQUE(array, [by_col], [exactly_once])",
+    "desc": "Returns unique values from a range or array.",
+    "ex": "=UNIQUE(A2:A100)",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "TAKE",
+    "cat": "Lookup & Reference",
+    "syntax": "TAKE(array, rows, [columns])",
+    "desc": "Returns the first or last rows and columns from an array.",
+    "ex": "=TAKE(A2:D20, 5) → First 5 rows",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "DROP",
+    "cat": "Lookup & Reference",
+    "syntax": "DROP(array, rows, [columns])",
+    "desc": "Removes rows or columns from the start or end of an array.",
+    "ex": "=DROP(A2:D20, 1) → Skip header row",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "CHOOSECOLS",
+    "cat": "Lookup & Reference",
+    "syntax": "CHOOSECOLS(array, col_num1, [col_num2], ...)",
+    "desc": "Returns selected columns from an array.",
+    "ex": "=CHOOSECOLS(A2:F20, 1, 4, 6)",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "CHOOSEROWS",
+    "cat": "Lookup & Reference",
+    "syntax": "CHOOSEROWS(array, row_num1, [row_num2], ...)",
+    "desc": "Returns selected rows from an array.",
+    "ex": "=CHOOSEROWS(A2:D20, 1, 3, 5)",
+    "ver": "Excel 365"
+  },
+  {
+    "name": "TODAY",
+    "cat": "Date & Time",
+    "syntax": "TODAY()",
+    "desc": "Returns the current date.",
+    "ex": "=TODAY() → Current date",
+    "ver": "All Versions"
+  },
+  {
+    "name": "NOW",
+    "cat": "Date & Time",
+    "syntax": "NOW()",
+    "desc": "Returns the current date and time.",
+    "ex": "=NOW() → Current timestamp",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DATE",
+    "cat": "Date & Time",
+    "syntax": "DATE(year, month, day)",
+    "desc": "Builds a valid Excel date from year, month, and day values.",
+    "ex": "=DATE(2026, 3, 31)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DATEDIF",
+    "cat": "Date & Time",
+    "syntax": "DATEDIF(start_date, end_date, unit)",
+    "desc": "Returns the difference between two dates in years, months, or days.",
+    "ex": "=DATEDIF(A2, B2, \"m\") → Complete months",
+    "ver": "All Versions"
+  },
+  {
+    "name": "DAY",
+    "cat": "Date & Time",
+    "syntax": "DAY(serial_number)",
+    "desc": "Returns the day of the month from a date.",
+    "ex": "=DAY(TODAY())",
+    "ver": "All Versions"
+  },
+  {
+    "name": "MONTH",
+    "cat": "Date & Time",
+    "syntax": "MONTH(serial_number)",
+    "desc": "Returns the month number from a date.",
+    "ex": "=MONTH(TODAY())",
+    "ver": "All Versions"
+  },
+  {
+    "name": "YEAR",
+    "cat": "Date & Time",
+    "syntax": "YEAR(serial_number)",
+    "desc": "Returns the year from a date.",
+    "ex": "=YEAR(TODAY())",
+    "ver": "All Versions"
+  },
+  {
+    "name": "EDATE",
+    "cat": "Date & Time",
+    "syntax": "EDATE(start_date, months)",
+    "desc": "Returns a date shifted by a number of months.",
+    "ex": "=EDATE(A2, 6) → Six months later",
+    "ver": "All Versions"
+  },
+  {
+    "name": "EOMONTH",
+    "cat": "Date & Time",
+    "syntax": "EOMONTH(start_date, months)",
+    "desc": "Returns the last day of a month shifted by a number of months.",
+    "ex": "=EOMONTH(A2, 0) → Month end",
+    "ver": "All Versions"
+  },
+  {
+    "name": "WEEKDAY",
+    "cat": "Date & Time",
+    "syntax": "WEEKDAY(serial_number, [return_type])",
+    "desc": "Returns the weekday number for a date.",
+    "ex": "=WEEKDAY(A2, 2) → Monday=1",
+    "ver": "All Versions"
+  },
+  {
+    "name": "WEEKNUM",
+    "cat": "Date & Time",
+    "syntax": "WEEKNUM(serial_number, [return_type])",
+    "desc": "Returns the week number for a date.",
+    "ex": "=WEEKNUM(TODAY(), 2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "WORKDAY",
+    "cat": "Date & Time",
+    "syntax": "WORKDAY(start_date, days, [holidays])",
+    "desc": "Returns a workday after adding a number of business days.",
+    "ex": "=WORKDAY(A2, 10, H2:H10)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "NETWORKDAYS",
+    "cat": "Date & Time",
+    "syntax": "NETWORKDAYS(start_date, end_date, [holidays])",
+    "desc": "Counts working days between two dates.",
+    "ex": "=NETWORKDAYS(A2, B2, H2:H10)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "HOUR",
+    "cat": "Date & Time",
+    "syntax": "HOUR(serial_number)",
+    "desc": "Returns the hour from a time value.",
+    "ex": "=HOUR(NOW())",
+    "ver": "All Versions"
+  },
+  {
+    "name": "MINUTE",
+    "cat": "Date & Time",
+    "syntax": "MINUTE(serial_number)",
+    "desc": "Returns the minute from a time value.",
+    "ex": "=MINUTE(NOW())",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SECOND",
+    "cat": "Date & Time",
+    "syntax": "SECOND(serial_number)",
+    "desc": "Returns the second from a time value.",
+    "ex": "=SECOND(NOW())",
+    "ver": "All Versions"
+  },
+  {
+    "name": "TIME",
+    "cat": "Date & Time",
+    "syntax": "TIME(hour, minute, second)",
+    "desc": "Builds a valid Excel time from hour, minute, and second values.",
+    "ex": "=TIME(14, 30, 0) → 2:30 PM",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ISBLANK",
+    "cat": "Information",
+    "syntax": "ISBLANK(value)",
+    "desc": "Returns TRUE when a cell is empty.",
+    "ex": "=ISBLANK(A1) → TRUE if empty",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ISNUMBER",
+    "cat": "Information",
+    "syntax": "ISNUMBER(value)",
+    "desc": "Returns TRUE when the value is numeric.",
+    "ex": "=ISNUMBER(A2) → TRUE for numbers",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ISTEXT",
+    "cat": "Information",
+    "syntax": "ISTEXT(value)",
+    "desc": "Returns TRUE when the value is text.",
+    "ex": "=ISTEXT(A2) → TRUE for text",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ISLOGICAL",
+    "cat": "Information",
+    "syntax": "ISLOGICAL(value)",
+    "desc": "Returns TRUE when the value is TRUE or FALSE.",
+    "ex": "=ISLOGICAL(A2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ISERROR",
+    "cat": "Information",
+    "syntax": "ISERROR(value)",
+    "desc": "Returns TRUE for any Excel error value.",
+    "ex": "=ISERROR(A2/B2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ISERR",
+    "cat": "Information",
+    "syntax": "ISERR(value)",
+    "desc": "Returns TRUE for any error except #N/A.",
+    "ex": "=ISERR(A2/B2)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ISNA",
+    "cat": "Information",
+    "syntax": "ISNA(value)",
+    "desc": "Returns TRUE when the value is #N/A.",
+    "ex": "=ISNA(VLOOKUP(E2, A:B, 2, FALSE))",
+    "ver": "All Versions"
+  },
+  {
+    "name": "ERROR.TYPE",
+    "cat": "Information",
+    "syntax": "ERROR.TYPE(error_val)",
+    "desc": "Returns a number representing an Excel error type.",
+    "ex": "=ERROR.TYPE(#DIV/0!) → 2",
+    "ver": "All Versions"
+  },
+  {
+    "name": "TYPE",
+    "cat": "Information",
+    "syntax": "TYPE(value)",
+    "desc": "Returns a number indicating the data type of a value.",
+    "ex": "=TYPE(A2) → 1 for number",
+    "ver": "All Versions"
+  },
+  {
+    "name": "N",
+    "cat": "Information",
+    "syntax": "N(value)",
+    "desc": "Converts a value to a number where possible.",
+    "ex": "=N(TRUE) → 1",
+    "ver": "All Versions"
+  },
+  {
+    "name": "PMT",
+    "cat": "Financial",
+    "syntax": "PMT(rate, nper, pv, [fv], [type])",
+    "desc": "Calculates the periodic payment for a loan or annuity.",
+    "ex": "=PMT(5%/12, 60, -25000)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "PV",
+    "cat": "Financial",
+    "syntax": "PV(rate, nper, pmt, [fv], [type])",
+    "desc": "Returns the present value of an investment or loan.",
+    "ex": "=PV(6%/12, 36, -400)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "FV",
+    "cat": "Financial",
+    "syntax": "FV(rate, nper, pmt, [pv], [type])",
+    "desc": "Returns the future value of an investment.",
+    "ex": "=FV(6%/12, 120, -200, 0)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "NPV",
+    "cat": "Financial",
+    "syntax": "NPV(rate, value1, [value2], ...)",
+    "desc": "Calculates net present value using periodic cash flows.",
+    "ex": "=NPV(10%, B2:B8) + B1",
+    "ver": "All Versions"
+  },
+  {
+    "name": "IRR",
+    "cat": "Financial",
+    "syntax": "IRR(values, [guess])",
+    "desc": "Returns the internal rate of return for a series of cash flows.",
+    "ex": "=IRR(B2:B8)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "RATE",
+    "cat": "Financial",
+    "syntax": "RATE(nper, pmt, pv, [fv], [type], [guess])",
+    "desc": "Returns the interest rate per period for an annuity.",
+    "ex": "=RATE(36, -400, 12000)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "NPER",
+    "cat": "Financial",
+    "syntax": "NPER(rate, pmt, pv, [fv], [type])",
+    "desc": "Returns the number of periods for an investment or loan.",
+    "ex": "=NPER(6%/12, -200, 10000)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "IPMT",
+    "cat": "Financial",
+    "syntax": "IPMT(rate, per, nper, pv, [fv], [type])",
+    "desc": "Returns the interest portion of a payment for a given period.",
+    "ex": "=IPMT(5%/12, 1, 60, 25000)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "PPMT",
+    "cat": "Financial",
+    "syntax": "PPMT(rate, per, nper, pv, [fv], [type])",
+    "desc": "Returns the principal portion of a payment for a given period.",
+    "ex": "=PPMT(5%/12, 1, 60, 25000)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "XNPV",
+    "cat": "Financial",
+    "syntax": "XNPV(rate, values, dates)",
+    "desc": "Calculates net present value using irregular cash-flow dates.",
+    "ex": "=XNPV(10%, B2:B8, A2:A8)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "XIRR",
+    "cat": "Financial",
+    "syntax": "XIRR(values, dates, [guess])",
+    "desc": "Returns the internal rate of return for irregular cash flows.",
+    "ex": "=XIRR(B2:B8, A2:A8)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SLN",
+    "cat": "Financial",
+    "syntax": "SLN(cost, salvage, life)",
+    "desc": "Returns straight-line depreciation for one period.",
+    "ex": "=SLN(12000, 2000, 5)",
+    "ver": "All Versions"
+  },
+  {
+    "name": "SYD",
+    "cat": "Financial",
+    "syntax": "SYD(cost, salvage, life, per)",
+    "desc": "Returns sum-of-years-digits depreciation for a period.",
+    "ex": "=SYD(12000, 2000, 5, 1)",
+    "ver": "All Versions"
+  }
 ];
 
 const CAT_CFG = {
-  "All":{"cc":"#1d6fa4","cb":"#dbeafe","dot":"#3b82f6"},
-  "Math & Trig":{"cc":"#166534","cb":"#dcfce7","dot":"#16a34a"},
-  "Statistical":{"cc":"#6d28d9","cb":"#ede9fe","dot":"#7c3aed"},
-  "Text":{"cc":"#c2410c","cb":"#ffedd5","dot":"#ea580c"},
-  "Logical":{"cc":"#0f766e","cb":"#ccfbf1","dot":"#0d9488"},
-  "Lookup & Reference":{"cc":"#1d4ed8","cb":"#dbeafe","dot":"#3b82f6"},
-  "Date & Time":{"cc":"#9d174d","cb":"#fce7f3","dot":"#ec4899"},
-  "Information":{"cc":"#92400e","cb":"#fef3c7","dot":"#f59e0b"},
+  'All': {cc:'#1d6fa4', cb:'#dbeafe', dot:'#3b82f6'},
+  'Math & Trig': {cc:'#166534', cb:'#dcfce7', dot:'#16a34a'},
+  'Statistical': {cc:'#6d28d9', cb:'#ede9fe', dot:'#7c3aed'},
+  'Text': {cc:'#c2410c', cb:'#ffedd5', dot:'#ea580c'},
+  'Logical': {cc:'#0f766e', cb:'#ccfbf1', dot:'#0d9488'},
+  'Lookup & Reference': {cc:'#1d4ed8', cb:'#dbeafe', dot:'#3b82f6'},
+  'Date & Time': {cc:'#9d174d', cb:'#fce7f3', dot:'#ec4899'},
+  'Information': {cc:'#92400e', cb:'#fef3c7', dot:'#f59e0b'},
+  'Financial': {cc:'#7c2d12', cb:'#ffedd5', dot:'#f97316'},
 };
-const VER_CLS = {"All Versions":"v-all","Excel 2007+":"v-07","Excel 2013+":"v-13","Excel 2016+":"v-16","Excel 2019+":"v-19","Excel 2021+":"v-21","Excel 365":"v-365"};
-const VER_ICO = {"All Versions":"📋","Excel 2007+":"🟠","Excel 2013+":"🟢","Excel 2016+":"🟡","Excel 2019+":"🩷","Excel 2021+":"🟣","Excel 365":"⭐"};
-const VERSIONS = ["All","All Versions","Excel 2007+","Excel 2013+","Excel 2016+","Excel 2019+","Excel 2021+","Excel 365"];
+const VER_CLS = {'All Versions':'v-all','Excel 2007+':'v-07','Excel 2013+':'v-13','Excel 2016+':'v-16','Excel 2019+':'v-19','Excel 2021+':'v-21','Excel 365':'v-365'};
+const VER_ICO = {'All':'📋','All Versions':'📋','Excel 2007+':'🟠','Excel 2013+':'🟢','Excel 2016+':'🟡','Excel 2019+':'🩷','Excel 2021+':'🟣','Excel 365':'⭐'};
+const VERSIONS = ['All', 'All Versions', 'Excel 2007+', 'Excel 2013+', 'Excel 2016+', 'Excel 2019+', 'Excel 2021+', 'Excel 365'];
+const ESCAPE_HTML_MAP = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'};
+const SEARCH_INDEX = new Map(FORMULAS.map((formula) => [formula.name, [formula.name, formula.syntax, formula.desc, formula.ex, formula.cat, formula.ver].join(' ').toLowerCase()]));
+const META = {
+  total: FORMULAS.length,
+  categories: FORMULAS.reduce((set, formula) => set.add(formula.cat), new Set()).size,
+  versions: FORMULAS.reduce((set, formula) => set.add(formula.ver), new Set()).size,
+};
+const THEME_KEY = 'excel-formula-book-theme';
 
-let activeCat="All", activeVer="All", query="", sort="default";
+let activeCat = 'All';
+let activeVer = 'All';
+let query = '';
+let sort = 'default';
 
-function init(){renderCats();renderVers();renderGrid();}
+function escapeHtml(text) {
+  return String(text).replace(/[&<>"']/g, (char) => ESCAPE_HTML_MAP[char]);
+}
 
-function renderCats(){
-  const cats=["All",...Object.keys(CAT_CFG).filter(c=>c!=="All")];
-  const el=document.getElementById("catFilters");el.innerHTML="";
-  cats.forEach(c=>{
-    const cnt=c==="All"?FORMULAS.length:FORMULAS.filter(f=>f.cat===c).length;
-    if(!cnt&&c!=="All")return;
-    const cfg=CAT_CFG[c]||CAT_CFG["All"];
-    const b=document.createElement("button");
-    b.className="pill"+(c===activeCat?" active":"");
-    b.innerHTML=`<span class="dot" style="background:${cfg.dot}"></span>${c}<span class="pill-count">${cnt}</span>`;
-    b.onclick=()=>{activeCat=c;renderCats();renderGrid();};
-    el.appendChild(b);
+function updateHeroStats() {
+  document.getElementById('totalCount').textContent = META.total;
+  document.getElementById('categoryCount').textContent = META.categories;
+  document.getElementById('versionCount').textContent = META.versions;
+}
+
+function init() {
+  updateHeroStats();
+  renderCats();
+  renderVers();
+  initTheme();
+  renderGrid();
+}
+
+function renderCats() {
+  const cats = ['All', ...Object.keys(CAT_CFG).filter((cat) => cat !== 'All' && FORMULAS.some((formula) => formula.cat === cat))];
+  const el = document.getElementById('catFilters');
+  el.innerHTML = '';
+  cats.forEach((cat) => {
+    const count = cat === 'All' ? FORMULAS.length : FORMULAS.filter((formula) => formula.cat === cat).length;
+    const cfg = CAT_CFG[cat] || CAT_CFG['All'];
+    const button = document.createElement('button');
+    button.className = 'pill' + (cat === activeCat ? ' active' : '');
+    button.innerHTML = `<span class="dot" style="background:${cfg.dot}"></span>${escapeHtml(cat)}<span class="pill-count">${count}</span>`;
+    button.onclick = () => {
+      activeCat = cat;
+      renderCats();
+      renderGrid();
+    };
+    el.appendChild(button);
   });
 }
 
-function renderVers(){
-  const el=document.getElementById("verFilters");el.innerHTML="";
-  VERSIONS.forEach(v=>{
-    const b=document.createElement("button");
-    b.className="ver-pill"+(v===activeVer?" active":"");
-    b.textContent=(VER_ICO[v]||"")+" "+v;
-    b.onclick=()=>{activeVer=v;renderVers();renderGrid();};
-    el.appendChild(b);
+function renderVers() {
+  const el = document.getElementById('verFilters');
+  el.innerHTML = '';
+  VERSIONS.filter((version) => version === 'All' || FORMULAS.some((formula) => formula.ver === version)).forEach((version) => {
+    const button = document.createElement('button');
+    button.className = 'ver-pill' + (version === activeVer ? ' active' : '');
+    button.textContent = `${VER_ICO[version] || '📋'} ${version}`;
+    button.onclick = () => {
+      activeVer = version;
+      renderVers();
+      renderGrid();
+    };
+    el.appendChild(button);
   });
 }
 
-function filtered(){
-  let list=[...FORMULAS];
-  if(activeCat!=="All")list=list.filter(f=>f.cat===activeCat);
-  if(activeVer!=="All")list=list.filter(f=>f.ver===activeVer);
-  if(query){const q=query.toLowerCase();list=list.filter(f=>f.name.toLowerCase().includes(q)||f.syntax.toLowerCase().includes(q)||f.desc.toLowerCase().includes(q)||f.cat.toLowerCase().includes(q));}
-  if(sort==="az")list.sort((a,b)=>a.name.localeCompare(b.name));
-  else if(sort==="za")list.sort((a,b)=>b.name.localeCompare(a.name));
-  else if(sort==="cat")list.sort((a,b)=>a.cat.localeCompare(b.cat)||a.name.localeCompare(b.name));
+function filtered() {
+  let list = [...FORMULAS];
+  if (activeCat !== 'All') list = list.filter((formula) => formula.cat === activeCat);
+  if (activeVer !== 'All') list = list.filter((formula) => formula.ver === activeVer);
+  if (query) {
+    const q = query.toLowerCase();
+    list = list.filter((formula) => SEARCH_INDEX.get(formula.name)?.includes(q) ?? false);
+  }
+  if (sort === 'az') list.sort((a, b) => a.name.localeCompare(b.name));
+  else if (sort === 'za') list.sort((a, b) => b.name.localeCompare(a.name));
+  else if (sort === 'cat') list.sort((a, b) => a.cat.localeCompare(b.cat) || a.name.localeCompare(b.name));
   return list;
 }
 
-function renderGrid(){
-  const list=filtered();
-  document.getElementById("resultCount").textContent=list.length+" Formulas";
-  document.getElementById("gridTitle").textContent=activeCat==="All"?"All Formulas":activeCat+" Formulas";
-  document.getElementById("gridSub").textContent="Showing "+list.length+" of "+FORMULAS.length+" formulas";
-  const g=document.getElementById("grid");
-  if(!list.length){g.innerHTML=`<div class="no-res"><div class="no-res-icon">🔍</div><h3>No formulas found</h3><p>Try different keywords or reset filters</p></div>`;return;}
-  g.innerHTML=list.map(f=>{
-    const cfg=CAT_CFG[f.cat]||CAT_CFG["All"];
-    const vc=VER_CLS[f.ver]||"v-all";
-    const vi=VER_ICO[f.ver]||"📋";
-    return`<div class="card" style="--cc:${cfg.cc};--cb:${cfg.cb}">
+function renderGrid() {
+  const list = filtered();
+  document.getElementById('resultCount').textContent = `${list.length} Formulas`;
+  document.getElementById('gridTitle').textContent = activeCat === 'All' ? 'All Formulas' : `${activeCat} Formulas`;
+  document.getElementById('gridSub').textContent = `Showing ${list.length} of ${FORMULAS.length} formulas`;
+  const grid = document.getElementById('grid');
+  if (!list.length) {
+    grid.innerHTML = '<div class="no-res"><div class="no-res-icon">🔍</div><h3>No formulas found</h3><p>Try different keywords or reset filters</p></div>';
+    return;
+  }
+  grid.innerHTML = list.map((formula, index) => {
+    const cfg = CAT_CFG[formula.cat] || CAT_CFG['All'];
+    const versionClass = VER_CLS[formula.ver] || 'v-all';
+    const versionIcon = VER_ICO[formula.ver] || '📋';
+    return `<div class="card" style="--cc:${cfg.cc};--cb:${cfg.cb}">
       <div class="card-top">
         <div class="card-name-wrap">
-          <span class="card-name">${f.name}</span>
-          <span class="cat-badge">${f.cat}</span>
+          <span class="card-name">${escapeHtml(formula.name)}</span>
+          <span class="cat-badge">${escapeHtml(formula.cat)}</span>
         </div>
-        <button class="copy-btn" data-s="${f.syntax}" aria-label="Copy formula">
+        <button class="copy-btn" data-copy-index="${index}" aria-label="Copy formula">
           <span class="copy-tip">Copy</span>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         </button>
       </div>
-      <div class="syntax">${f.syntax}</div>
-      <div class="desc">${f.desc}</div>
-      <div><div class="ex-lbl">Example</div><div class="ex-val">${f.ex}</div></div>
-      <div class="card-footer"><span class="ver-badge ${vc}">${vi} ${f.ver}</span></div>
+      <div class="syntax">${escapeHtml(formula.syntax)}</div>
+      <div class="desc">${escapeHtml(formula.desc)}</div>
+      <div><div class="ex-lbl">Example</div><div class="ex-val">${escapeHtml(formula.ex)}</div></div>
+      <div class="card-footer"><span class="ver-badge ${versionClass}">${versionIcon} ${escapeHtml(formula.ver)}</span></div>
     </div>`;
-  }).join("");
-  g.querySelectorAll(".copy-btn").forEach(b=>{
-    b.addEventListener("click",()=>{
-      const txt="="+b.dataset.s;
-      navigator.clipboard.writeText(txt).catch(()=>{});
-      const tip=b.querySelector(".copy-tip");
-      b.classList.add("copied");if(tip)tip.textContent="Copied!";
-      setTimeout(()=>{b.classList.remove("copied");if(tip)tip.textContent="Copy";},1800);
+  }).join('');
+
+  grid.querySelectorAll('.copy-btn').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const formula = list[Number(button.dataset.copyIndex)];
+      if (!formula) return;
+      try {
+        await navigator.clipboard.writeText(`=${formula.syntax}`);
+      } catch (error) {
+        console.warn('Failed to copy formula to clipboard', error);
+      }
+      const tip = button.querySelector('.copy-tip');
+      button.classList.add('copied');
+      if (tip) tip.textContent = 'Copied!';
+      setTimeout(() => {
+        button.classList.remove('copied');
+        if (tip) tip.textContent = 'Copy';
+      }, 1800);
     });
   });
 }
 
-document.getElementById("searchInput").addEventListener("input",e=>{query=e.target.value.trim();renderGrid();});
-document.getElementById("sortSel").addEventListener("change",e=>{sort=e.target.value;renderGrid();});
+function initTheme() {
+  const button = document.getElementById('themeBtn');
+  const root = document.documentElement;
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const sun = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+  const moon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
 
-(function(){
-  const btn=document.getElementById("themeBtn"),r=document.documentElement;
-  let d=matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";
-  r.setAttribute("data-theme",d);
-  const sun=`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
-  const moon=`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
-  btn.innerHTML=d==="dark"?sun:moon;
-  btn.addEventListener("click",()=>{d=d==="dark"?"light":"dark";r.setAttribute("data-theme",d);btn.innerHTML=d==="dark"?sun:moon;});
-})();
+  const getStoredTheme = () => {
+    try {
+      const storedTheme = localStorage.getItem(THEME_KEY);
+      return storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : null;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const applyTheme = (theme) => {
+    root.setAttribute('data-theme', theme);
+    button.innerHTML = theme === 'dark' ? sun : moon;
+  };
+
+  let theme = getStoredTheme() || (prefersDark.matches ? 'dark' : 'light');
+  applyTheme(theme);
+
+  button.addEventListener('click', () => {
+    theme = theme === 'dark' ? 'light' : 'dark';
+    applyTheme(theme);
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch (error) {
+      console.warn('Failed to save theme preference to localStorage. Theme will reset on page reload.', error);
+    }
+  });
+
+  if (typeof prefersDark.addEventListener === 'function') {
+    prefersDark.addEventListener('change', (event) => {
+      if (getStoredTheme()) return;
+      theme = event.matches ? 'dark' : 'light';
+      applyTheme(theme);
+    });
+  }
+}
+
+document.getElementById('searchInput').addEventListener('input', (event) => {
+  query = event.target.value.trim();
+  renderGrid();
+});
+document.getElementById('sortSel').addEventListener('change', (event) => {
+  sort = event.target.value;
+  renderGrid();
+});
 
 init();
 </script>
