@@ -162,8 +162,8 @@ input,select{font:inherit;color:inherit}
   <p>Complete guide to Excel formulas — syntax, examples, explanations &amp; Office version support. Search, filter &amp; copy instantly.</p>
   <div class="hero-stats">
     <div><span class="stat-num" id="totalCount">30</span><span class="stat-lbl">Formulas</span></div>
-    <div><span class="stat-num" id="categoryCount">8</span><span class="stat-lbl">Categories</span></div>
-    <div><span class="stat-num" id="versionCount">7</span><span class="stat-lbl">Versions</span></div>
+    <div><span class="stat-num" id="categoryCount">...</span><span class="stat-lbl">Categories</span></div>
+    <div><span class="stat-num" id="versionCount">...</span><span class="stat-lbl">Versions</span></div>
     <div><span class="stat-num">1-Click</span><span class="stat-lbl">Copy</span></div>
   </div>
 </section>
@@ -1246,10 +1246,12 @@ const CAT_CFG = {
 const VER_CLS = {'All Versions':'v-all','Excel 2007+':'v-07','Excel 2013+':'v-13','Excel 2016+':'v-16','Excel 2019+':'v-19','Excel 2021+':'v-21','Excel 365':'v-365'};
 const VER_ICO = {'All':'📋','All Versions':'📋','Excel 2007+':'🟠','Excel 2013+':'🟢','Excel 2016+':'🟡','Excel 2019+':'🩷','Excel 2021+':'🟣','Excel 365':'⭐'};
 const VERSIONS = ['All', 'All Versions', 'Excel 2007+', 'Excel 2013+', 'Excel 2016+', 'Excel 2019+', 'Excel 2021+', 'Excel 365'];
+const ESCAPE_HTML_MAP = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'};
+const SEARCH_INDEX = new Map(FORMULAS.map((formula) => [formula.name, [formula.name, formula.syntax, formula.desc, formula.ex, formula.cat, formula.ver].join(' ').toLowerCase()]));
 const META = {
   total: FORMULAS.length,
-  categories: new Set(FORMULAS.map((formula) => formula.cat)).size,
-  versions: new Set(FORMULAS.map((formula) => formula.ver)).size,
+  categories: FORMULAS.reduce((set, formula) => set.add(formula.cat), new Set()).size,
+  versions: FORMULAS.reduce((set, formula) => set.add(formula.ver), new Set()).size,
 };
 const THEME_KEY = 'excel-formula-book-theme';
 
@@ -1258,14 +1260,8 @@ let activeVer = 'All';
 let query = '';
 let sort = 'default';
 
-function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, (char) => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;',
-  })[char]);
+function escapeHtml(text) {
+  return String(text).replace(/[&<>"']/g, (char) => ESCAPE_HTML_MAP[char]);
 }
 
 function updateHeroStats() {
@@ -1288,7 +1284,7 @@ function renderCats() {
   el.innerHTML = '';
   cats.forEach((cat) => {
     const count = cat === 'All' ? FORMULAS.length : FORMULAS.filter((formula) => formula.cat === cat).length;
-    const cfg = CAT_CFG[cat] || CAT_CFG.All;
+    const cfg = CAT_CFG[cat] || CAT_CFG['All'];
     const button = document.createElement('button');
     button.className = 'pill' + (cat === activeCat ? ' active' : '');
     button.innerHTML = `<span class="dot" style="background:${cfg.dot}"></span>${escapeHtml(cat)}<span class="pill-count">${count}</span>`;
@@ -1323,7 +1319,7 @@ function filtered() {
   if (activeVer !== 'All') list = list.filter((formula) => formula.ver === activeVer);
   if (query) {
     const q = query.toLowerCase();
-    list = list.filter((formula) => [formula.name, formula.syntax, formula.desc, formula.ex, formula.cat, formula.ver].some((value) => value.toLowerCase().includes(q)));
+    list = list.filter((formula) => SEARCH_INDEX.get(formula.name)?.includes(q) ?? false);
   }
   if (sort === 'az') list.sort((a, b) => a.name.localeCompare(b.name));
   else if (sort === 'za') list.sort((a, b) => b.name.localeCompare(a.name));
@@ -1342,7 +1338,7 @@ function renderGrid() {
     return;
   }
   grid.innerHTML = list.map((formula, index) => {
-    const cfg = CAT_CFG[formula.cat] || CAT_CFG.All;
+    const cfg = CAT_CFG[formula.cat] || CAT_CFG['All'];
     const versionClass = VER_CLS[formula.ver] || 'v-all';
     const versionIcon = VER_ICO[formula.ver] || '📋';
     return `<div class="card" style="--cc:${cfg.cc};--cb:${cfg.cb}">
@@ -1370,7 +1366,7 @@ function renderGrid() {
       try {
         await navigator.clipboard.writeText(`=${formula.syntax}`);
       } catch (error) {
-        console.warn('Clipboard copy failed', error);
+        console.warn('Failed to copy formula to clipboard', error);
       }
       const tip = button.querySelector('.copy-tip');
       button.classList.add('copied');
@@ -1393,9 +1389,9 @@ function initTheme() {
   const getStoredTheme = () => {
     try {
       const storedTheme = localStorage.getItem(THEME_KEY);
-      return storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : '';
+      return storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : null;
     } catch (error) {
-      return '';
+      return null;
     }
   };
 
@@ -1413,7 +1409,7 @@ function initTheme() {
     try {
       localStorage.setItem(THEME_KEY, theme);
     } catch (error) {
-      console.warn('Theme preference could not be stored', error);
+      console.warn('Failed to save theme preference to localStorage. Theme will reset on page reload.', error);
     }
   });
 
